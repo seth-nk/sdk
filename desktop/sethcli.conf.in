@@ -1,0 +1,44 @@
+[desktop]
+compat=__COMPAT_LEVEL__
+
+[seth]
+# filename: path to seth data file
+filename=/path/to/data/file
+
+[pap]
+# username: your PAP username, the empty pap username will let seth-desktop to use papname in data file.
+#           If it is empty and privacy extension enabled in data file, program will fail.
+#username=
+
+# password: your PAP password
+password=123123
+
+[pppoe]
+# backend: specify the PPPoE backend
+#          rp-pppoe: user mode rp-pppoe plugin. (Linux/Unix)
+#          rp-pppoe-linux: kernel mode rp-pppoe plugin for Linux. (Linux only)
+#          nmcli: use d-bus client to communicate with NetworkManager. It can make your
+#                 desktop-environment perceive connectivity and integration it. (Linux/Unix)
+#                 (Experimental quality)
+#          webhook: not impl yet.
+#          ranga: not impl yet.
+#          rasapi: win32 Ras API. (Windows only)
+# for more backends, please see srcdir/backends/backends.mk
+backend=__DEF_BACKEND__
+
+# interface: specify whitch inrerface should establish PPPoE. (not work on Windows)
+interface=eth0
+
+# enable_ipv6: try to request IPv6 address and route. only available on ``nmcli" backend. It is always enabled for other backends.
+enable_ipv6=1
+
+# auto_def_route: auto set pppoe to default route (not work on Windows), always enable yet.
+auto_def_route=1
+
+[plugin]
+# not impl yet.
+enable_plugins=
+
+[seth4win]
+# pause: pause and wait for any key after dial-up on Windows to avoid console window close.
+pause=1

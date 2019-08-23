@@ -1,0 +1,25 @@
+id ICON "seth4win.ico"
+
+1 VERSIONINFO
+FILEVERSION     0,0,0,1
+PRODUCTVERSION  0,0,0,1
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "CompanyName", "The-Seth-Project"
+      VALUE "FileDescription", "Seth Desktop-CLI demo for Windows"
+      VALUE "FileVersion", "nil"
+      VALUE "InternalName", "sethcli"
+      VALUE "LegalCopyright", "MIT"
+      VALUE "OriginalFilename", "sethcli4win.exe"
+      VALUE "ProductName", "sethcli4win"
+      VALUE "ProductVersion", "nil"
+    END
+  END
+  BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
