@@ -150,7 +150,7 @@ int seth_application_main(int argc, char *argv[])
 	int err;
 	if ((err = seth_nkpin_get_from_file(filename, papuser, time(NULL), &papreal)) < 0) {
 		fprintf(stderr, "seth_nkpin_get_from_file error, errcode: %d\n", err);
-		exit(1);
+		goto end;
 	}
 
 	printf("override PAP username: ^M%s\n", papreal + 1);
