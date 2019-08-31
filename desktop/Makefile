@@ -60,6 +60,7 @@ clean:
 
 install:
 	$(INSTALL) -m755 sethcli $(PREFIX)/bin/
+	$(INSTALL) -m755 seth-pppoe $(PREFIX)/bin/
 
 uninstall:
 	rm -f $(PREFIX)/bin/sethcli
