@@ -101,7 +101,7 @@ int seth_application_main(int argc, char *argv[])
 	               " * copyright 2019 NSWA Maintainers\n" \
 	               " * copyright 2019 The-Seth-Project\n" \
 		       "\n" \
-		       " SDK repo: https://github.com/glider0/seth-sdk\n" \
+		       " SDK repo: https://github.com/seth-project/sdk\n" \
 		       " Website: https://tienetech.tk/seth/\n" \
 	               "===============================================");
 
