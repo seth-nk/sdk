@@ -95,6 +95,26 @@ int seth_application_main(int argc, char *argv[])
 	printf("current dir: %s\n", getcwd(NULL, 0));
 #endif // _DEBUG
 
+	int shift = 0;
+	char cmd_platformdef = 0,
+		cmd_nofilecreation = 0;
+	
+	while (argc > shift + 1) {
+		shift++;
+
+		if (strcmp(argv[shift], "-LoadPlatformDefaultConfig") == 0) {
+			cmd_platformdef = 1;
+		} else if (strcmp(argv[shift], "-NoConfigFileCreation") == 0) {
+			cmd_nofilecreation = 1;
+		} else if (strcmp(argv[shift], "-OverrideConfig") == 0) {
+			shift += 2;
+			if (argc > shift)
+				Config::add_override(argv[shift - 1], argv[shift]);
+		} else if (strcmp(argv[shift], "-") == 0) {
+			break;
+		}
+	}
+
 	printf("%s\n", "Seth Desktop-CLI demo for " OSNAME "\n" \
 	               "Version: " SD_VERSION "\n" \
 	               "build with Seth SDK which licensed by MIT\n\n" \
@@ -105,7 +125,7 @@ int seth_application_main(int argc, char *argv[])
 		       " Website: https://tienetech.tk/seth/\n" \
 	               "===============================================");
 
-	if(access("sethcli.conf", F_OK) == -1) {
+	if (!cmd_nofilecreation && access("sethcli.conf", F_OK) == -1) {
 		fprintf(stderr, "generating configuration file 'sethcli.conf'...\n");
 		FILE *f = fopen("sethcli.conf", "w");
 		if (f == NULL) {
@@ -125,7 +145,9 @@ int seth_application_main(int argc, char *argv[])
 		goto end;
 	}
 
-	if (!Config::open("sethcli.conf")) {
+	if (cmd_platformdef) {
+		Config::open_mem(default_sethcli_conf, sizeof(default_sethcli_conf) - 1);
+	} else if (!Config::open("sethcli.conf")) {
 		fprintf(stderr, "configuration file open failed.\n");
 		exit(1);
 	}

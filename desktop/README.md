@@ -1,13 +1,28 @@
 # Seth Desktop-CLI
 
+## 使用说明
+
+### 交互模式
+
+WIP
+
+### 脚本模式
+
+WIP
+
+```
+sethcli -NoConfigFileCreation -LoadPlatformDefaultConfig -OverrideConfig pap.password 233333 -OverrideConfig seth.filename /path/to/datafile.sth3 
+```
+
 ## 从源码构建
 
 ### 依赖
 
 ```
-libseth（请自行构建并安装）
+libseth（来自 Seth SDK，请自行构建并安装）
 libglib2-0
 libnm-dev （如果启用了 nmcli 后端）
+WSL（如果构建 Windows 版本，由 MinGW 提供）
 ```
 
 ### 构建与安装
@@ -16,12 +31,12 @@ libnm-dev （如果启用了 nmcli 后端）
 
 ```
 $ make
-$ make install
+$ sudo make install
 ```
 
-## Windows 构建
+## Windows 版本
 
-Windows 构建需要在类 UNIX 系统上运行 wine 进行，并在其中安装，Mingw 和 GTK+3 for Windows，请阅读 `wine_compile.sh` 获取更多信息。在纯 Windows 环境上构建应该是可行的，请自行研究。
+我们建议你使用[预先构建的 Windows 二进制版本](https://github.com/seth-project/sdk/releases/)，如果一定要自己编译，则 Windows 构建需要在类 UNIX 系统上运行 wine 进行，并在其中安装，MinGW 和 GTK+3 for Windows，请阅读 `wine_compile.sh` 获取更多信息。在纯 Windows 环境上构建应该是可行的，请自行研究。
 
 ## 法律信息备注
 

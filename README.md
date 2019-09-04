@@ -40,11 +40,13 @@ sudo make install
 
 ## seth-desktop 构建
 
-需要先构建并安装 libseth，然后参考 `desktop` 目录下的 README 文件进行操作。
+需要先构建并安装 libseth，然后参考 `desktop` 目录下的 [README 文件](desktop/README.md)进行操作。
 
-## Windows 版本构建
+使用方法参考 `desktop` 目录下的 [README 文件](desktop/README.md)中的说明。
 
-Windows 构建需要在类 UNIX 系统上运行 wine 进行，并在其中安装，Mingw 和 GTK+3 for Windows，请阅读 `wine_compile.sh` 获取更多信息。在纯 Windows 环境上构建应该是可行的，请自行研究。
+## Windows 版本
+
+我们建议你使用[预先构建的 Windows 二进制版本](https://github.com/seth-project/sdk/releases/)，如果一定要自己编译，则 Windows 构建需要在类 UNIX 系统上运行 wine 进行，并在其中安装，MinGW 和 GTK+3 for Windows，请阅读 `wine_compile.sh` 获取更多信息。在纯 Windows 环境上构建应该是可行的，请自行研究。
 
 ## 平台
 

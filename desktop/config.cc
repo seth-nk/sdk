@@ -10,6 +10,8 @@
 #define _BSD_SOURCE
 #define _DEFAULT_SOURCE
 
+#include <map>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -31,6 +33,12 @@
 bool Config::modified = false;
 namespace Config {
 static GKeyFile *kfile = nullptr;
+static std::map<std::string, std::string> override_map;
+}
+
+void Config::add_override(const char *key, const char *value)
+{
+	override_map.insert({ key, value });
 }
 
 bool Config::open(const char *file)
@@ -41,6 +49,14 @@ bool Config::open(const char *file)
 	return (g_key_file_load_from_file(kfile, file, G_KEY_FILE_NONE, nullptr) == TRUE);
 }
 
+bool Config::open_mem(const char *data, size_t length)
+{
+	if (!(kfile = g_key_file_new()))
+		return false;
+
+	return (g_key_file_load_from_data(kfile, data, length, G_KEY_FILE_NONE, nullptr) == TRUE);
+}
+
 bool Config::save(const char *file)
 {
 	if (modified && kfile)
@@ -48,8 +64,23 @@ bool Config::save(const char *file)
 	return true;
 }
 
+const char *Config::__get_overided_value(const char *sec, const char *key)
+{
+	std::string map_key = std::string(sec) + "." + key;
+	auto itr = override_map.find(map_key);
+	if (itr != override_map.end()) {
+		return itr->second.data();
+	}
+
+	return nullptr;
+}
+
 const char *Config::get(const char *sec, const char *key)
 {
+	const char *tmp = __get_overided_value(sec, key);
+	if (tmp != nullptr)
+		return tmp;
+
 	return g_key_file_get_string(kfile, sec, key, nullptr);
 }
 
@@ -65,5 +96,9 @@ const char *Config::get(const char *sec, const char *key, const char *def)
 
 long Config::get_int(const char *sec, const char *key)
 {
+	const char *tmp = __get_overided_value(sec, key);
+	if (tmp != nullptr)
+		return atoi(tmp);
+
 	return g_key_file_get_integer(kfile, sec, key, nullptr);
 }
