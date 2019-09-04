@@ -74,7 +74,7 @@ bool SDBackendRasapi::dialup(const char *usrnam, const char *passwd)
 	pRasEntry.dwfOptions2 = RASEO2_Internet;
 	RasSetEntryPropertiesA(NULL, SETHD_PPPOE_IFNAME, &pRasEntry, sizeof(pRasEntry), NULL, 0);
 
-	HRASCONN hRasConn;
+	HRASCONN hRasConn = NULL;
 	RASDIALPARAMSA pRasPara = { 0 };
 	pRasPara.dwSize = sizeof(RASDIALPARAMSA);
 	strcpy(pRasPara.szEntryName, SETHD_PPPOE_IFNAME);
@@ -84,7 +84,7 @@ bool SDBackendRasapi::dialup(const char *usrnam, const char *passwd)
 	strcpy(pRasPara.szUserName, usrnam);
 	strcpy(pRasPara.szPassword, passwd);
 	DWORD pDialRes;
-	if ((pDialRes = RasDialA(NULL, NULL, &pRasPara, 0, NULL, &hRasConn)) != 0) {
+	if ((pDialRes = RasDialA(NULL, NULL, &pRasPara, 0, NULL, &hRasConn)) != ERROR_SUCCESS) {
 		RasHangUpA(hRasConn);
 		wchar_t szRasString[512];
 		RasGetErrorStringW(pDialRes, szRasString, 512);
