@@ -23,6 +23,11 @@
 #include <fcntl.h>
 #include <inttypes.h>
 #include <libgen.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <sys/ioctl.h>
+#include <net/if.h>
 
 extern "C" {
 #include <glib.h>
@@ -108,8 +113,8 @@ void SDBackendNmcli::cb_add_connection(GObject *client, GAsyncResult *result, gp
 		g_error_free(error);
 		g_main_loop_quit(loop);
 	} else {
-		g_object_unref(conn);
 		nm_client_activate_connection_async(NM_CLIENT(client), NM_CONNECTION(conn), nullptr, nullptr, nullptr, &SDBackendNmcli::cb_active, user_data);
+		g_object_unref(conn);
 	}
 }
 
@@ -152,7 +157,7 @@ bool SDBackendNmcli::dialup(const char *usrnam, const char *passwd)
 	g_object_set(G_OBJECT(s_con),
 			NM_SETTING_CONNECTION_UUID, uuid,
 			NM_SETTING_CONNECTION_ID, SETHD_PPPOE_IFNAME "nm",
-			NM_SETTING_CONNECTION_INTERFACE_NAME, ifname,
+			NM_SETTING_CONNECTION_INTERFACE_NAME, SETHD_PPPOE_IFNAME, //ifname,
 			NM_SETTING_CONNECTION_TYPE, "pppoe",
 			NM_SETTING_CONNECTION_AUTOCONNECT, FALSE,
 			nullptr);
@@ -160,6 +165,7 @@ bool SDBackendNmcli::dialup(const char *usrnam, const char *passwd)
 
 	s_pppoe = (NMSettingPppoe *)nm_setting_pppoe_new();
 	g_object_set(G_OBJECT(s_pppoe),
+			NM_SETTING_PPPOE_PARENT, ifname,
 			NM_SETTING_PPPOE_USERNAME, usrnam,
 			NM_SETTING_PPPOE_PASSWORD, passwd,
 			nullptr);
@@ -219,8 +225,57 @@ err_client_new:
 
 bool SDBackendNmcli::getstat()
 {
-	/* TODO: please impl this function */
-	return false;
+	int fd;
+	struct ifreq ifr;
+	char iface[] = SETHD_PPPOE_IFNAME;
+
+	fd = socket(AF_INET, SOCK_DGRAM, 0);
+
+	ifr.ifr_addr.sa_family = AF_INET;
+	strncpy(ifr.ifr_name , iface , IFNAMSIZ - 1);
+
+	return (ioctl(fd, SIOCGIFINDEX, &ifr) == 0);
+/*
+	bool ret = false;
+	NMClient *client;
+	NMRemoteConnection *conn;
+	GError *error = nullptr;
+	NMSettingGeneric *s_generic;
+	NMSetting *s_generic;
+	guint state;
+
+	this->lasterror = "";
+
+	client = nm_client_new(nullptr, &error);
+	if (!client) {
+		lasterror = std::string("error connecting to NetworkManager, libnm reported: ") + error->message;
+		g_error_free(error);
+		goto err_client_new;
+	}
+
+	if ((conn = nm_client_get_connection_by_uuid(client, uuid)) == nullptr) {
+		goto no_connection;
+	}
+
+	if ((s_generic = nm_connection_get_setting_generic(NM_CONNECTION(conn))) == nullptr) {
+		lasterror = std::string("nm_connection_get_setting_generic() failed.");
+		goto err_get_setting;
+	}
+
+	g_object_get(s_generic,
+			"STATE", &state,
+			nullptr);
+
+	if (state == NM_ACTIVE_CONNECTION_STATE_ACTIVATING || state == NM_ACTIVE_CONNECTION_STATE_ACTIVATED) {
+		ret = true;
+	}
+
+err_get_setting:
+no_connection:
+	g_object_unref(client);
+err_client_new:
+	return ret;
+*/
 }
 
 std::string SDBackendNmcli::get_last_error()
