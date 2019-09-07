@@ -47,8 +47,6 @@ extern "C" {
 #include "backend.h"
 #include "version.h"
 
-#include "sethcli_conf.h"
-
 LIBSETH_APPLICATION("crop.seth.dkt.cli")
 
 static void check_null(const void *s, const char *name)
@@ -132,7 +130,7 @@ int seth_application_main(int argc, char *argv[])
 			fprintf(stderr, "create configuration file failed.\n");
 			exit(1);
 		}
-		if (fwrite(default_sethcli_conf, 1, sizeof(default_sethcli_conf) - 1, f) != sizeof(default_sethcli_conf) - 1) {
+		if (fwrite(default_sethcli_conf, 1, default_sethcli_conf_size, f) != default_sethcli_conf_size) {
 			fprintf(stderr, "init configuration file failed.\n");
 			unlink("sethcli.conf");
 			exit(1);
@@ -146,7 +144,7 @@ int seth_application_main(int argc, char *argv[])
 	}
 
 	if (cmd_platformdef) {
-		Config::open_mem(default_sethcli_conf, sizeof(default_sethcli_conf) - 1);
+		Config::open_mem(default_sethcli_conf, default_sethcli_conf_size);
 	} else if (!Config::open("sethcli.conf")) {
 		fprintf(stderr, "configuration file open failed.\n");
 		exit(1);

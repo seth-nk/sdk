@@ -1,7 +1,14 @@
 #!/bin/bash
 
+cat <<EOF
+#include <stddef.h>
+EOF
+
 echo -n "char ${3}[] = \""
 
 version=`cat version.h | grep "SD_CONFIG_COMPAT" | cut -d " " -f 3`
 cat "$2" | sed -e "s/__DEF_BACKEND__/${1:-rp-pppoe}/" -e "s/__COMPAT_LEVEL__/$version/" | hexdump -v -e '"\\" "x" 1/1 "%02X"'
 echo "\";"
+
+size=`cat "$2" | wc -c`
+echo "size_t ${3}_size = ${size};"

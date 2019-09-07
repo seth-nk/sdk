@@ -2,16 +2,26 @@
 
 ## 使用说明
 
-### 交互模式
+### GTK 模式
 
 WIP
 
-### 脚本模式
+### CLI 交互模式
 
 WIP
 
 ```
-sethcli -NoConfigFileCreation -LoadPlatformDefaultConfig -OverrideConfig pap.password 233333 -OverrideConfig seth.filename /path/to/datafile.sth3 
+$ sethdkt-cli
+```
+
+[配置文件](sethcli.conf.in)
+
+### CLI 脚本模式
+
+WIP
+
+```
+$ sethdkt-cli -NoConfigFileCreation -LoadPlatformDefaultConfig -OverrideConfig pap.password 233333 -OverrideConfig seth.filename /path/to/datafile.sth3 
 ```
 
 ## 从源码构建
@@ -19,10 +29,11 @@ sethcli -NoConfigFileCreation -LoadPlatformDefaultConfig -OverrideConfig pap.pas
 ### 依赖
 
 ```
-libseth（来自 Seth SDK，请自行构建并安装）
-libglib2-0
+libseth（必须，来自 Seth SDK，请自行构建并安装）
+libglib2-0（必须）
 libnm-dev （如果启用了 nmcli 后端）
-WSL（如果构建 Windows 版本，由 MinGW 提供）
+libgtk-3-dev（如果构建 gtk 前端）
+WSL（如果构建 Windows 目标，由 MinGW 提供）
 ```
 
 ### 构建与安装

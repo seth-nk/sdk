@@ -1,6 +1,11 @@
 #ifndef _CONFIG_H
 #define _CONFIG_H
 
+#include <stddef.h>
+
+extern const char default_sethcli_conf[];
+extern size_t default_sethcli_conf_size;
+
 namespace Config {
 	extern bool modified;
 

@@ -48,22 +48,23 @@ CXXFLAGS := -std=c++11 $(COMMENFLAGS)
 
 all : $(ALL)
 
-$(LIBSETHDKT) : sethcli_conf.h $(OBJS)
+$(LIBSETHDKT) : sethcli_conf.o $(OBJS)
 	$(CXX) -fPIC -shared $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 	$(STRIP) -s $@
 
-sethdkt-cli : frontend-cli.cc $(LIBSETHDKT) sethcli_conf.h
-	$(CXX) $(CXXFLAGS) -o $@.o $(shell $(PKGCONFIG) --cflags gtk+-3.0) -c $<
-	$(CXX) -no-pie $(CXXFLAGS) -o $@$(BINSUFFIX) $@.o $(LDFLAGS) -lsethdkt -L.
+sethdkt-cli : frontend-cli.cc $(LIBSETHDKT)
+	$(CXX) $(SETHDKT_CLI_EXTRA_FLAGS) $(CXXFLAGS) -o $@.o -c $<
+	$(CXX) -no-pie $(SETHDKT_CLI_EXTRA_FLAGS) $(CXXFLAGS) -o $@$(BINSUFFIX) $@.o $(LDFLAGS) -lsethdkt -L.
 	$(STRIP) -s $@$(BINSUFFIX)
 
-sethdkt-gtk : frontend-gtk.cc $(LIBSETHDKT) sethcli_conf.h
+sethdkt-gtk : frontend-gtk.cc $(LIBSETHDKT) frontend-gtk.glade
+	./scripts/bin2h frontend-gtk.glade glade > frontend-gtk-glade.h
 	$(CXX) $(SETHDKT_GTK_EXTRA_FLAGS) $(CXXFLAGS) -o $@.o $(shell $(PKGCONFIG) --cflags gtk+-3.0) -c $<
 	$(CXX) -no-pie $(SETHDKT_GTK_EXTRA_FLAGS) $(CXXFLAGS) -o $@$(BINSUFFIX) $@.o $(LDFLAGS) -lsethdkt -L. $(shell $(PKGCONFIG) --libs gtk+-3.0)
 	$(STRIP) -s $@$(BINSUFFIX)
 
-sethcli_conf.h : sethcli.conf.in
-	./scripts/mkch "$(DEF_BACKEND)" sethcli.conf.in default_sethcli_conf > sethcli_conf.h
+sethcli_conf.c : sethcli.conf.in
+	./scripts/mkch "$(DEF_BACKEND)" $< default_sethcli_conf > $@
  
 %.res : %.rc
 	windres $< -O coff -o $@
@@ -72,7 +73,7 @@ sethcli_conf.h : sethcli.conf.in
 	$(CXX) -fPIC $(CXXFLAGS) -o $@ -c $<
 
 clean:
-	rm -f $(ALL) $(OBJS) *.o *.res *.exe *.so *.dll sethcli_conf.h
+	rm -f $(ALL) $(OBJS) *.o *.res *.exe *.so *.dll sethcli_conf.c frontend-gtk-glade.h
 
 install:
 	$(INSTALL) -m755 $(LIBSETHDKT) $(PREFIX)/lib/

@@ -18,8 +18,10 @@ compile_commands.json
 seth-sdk-windows/
 
 desktop/sethcli.conf
-desktop/sethcli_conf.h
-desktop/sethcli
+desktop/sethcli_conf.c
+desktop/frontend-gtk-glade.h
+desktop/sethdkt-cli
+desktop/sethdkt-gtk
 desktop/seth4win.res
 
 libseth/seth-nkgetpin
