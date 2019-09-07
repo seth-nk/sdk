@@ -49,7 +49,7 @@ extern "C" {
 
 #include "sethcli_conf.h"
 
-LIBSETH_APPLICATION("cli")
+LIBSETH_APPLICATION("crop.seth.dkt.cli")
 
 static void check_null(const void *s, const char *name)
 {
@@ -79,7 +79,7 @@ int seth_application_main(int argc, char *argv[])
 	setvbuf(stderr, NULL, _IONBF, 0);
 #else
 	std::string confighome = g_get_user_config_dir();
-	confighome += "/sethcli/";
+	confighome += "/sethdkt/";
 	mkdir(confighome.data(), 0775);
 	if (chdir(confighome.data()) < 0) {
 		perror("chdir");

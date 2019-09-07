@@ -5,15 +5,19 @@
 # This is free software with ABSOLUTELY NO WARRANTY.
 # 
 
-BINSUFFIX := 4win.exe
-COMMENFLAGS += -mconsole -D_WIN32 -I../libseth
+LIBSETHDKT := libsethdkt.dll
+
+BINSUFFIX := .exe
+COMMENFLAGS += -D_WIN32 -I../libseth
 LDFLAGS += -L../libseth -lws2_32 -lRasapi32 -lShlwapi -Wl,-Bstatic
 OBJS += seth4win.res
 
 OSNAME := Windows
 DEF_BACKEND := rasapi
 PKG_STATIC := --static
-POST_LDFLAGS += -lpthread -liconv
+POST_LDFLAGS += -lpthread -liconv -Wl,--export-all-symbols -Wl,-Bdynamic
+
+SETHDKT_GTK_EXTRA_FLAGS := -mwindows
 
 CONFIG_BACKEND_RASAPI := y
 CONFIG_BACKEND_RANGA := y

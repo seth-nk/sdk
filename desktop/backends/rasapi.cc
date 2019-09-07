@@ -159,7 +159,7 @@ done:
 bool SDBackendRasapi::hangup()
 {
 #ifdef _WIN32
-	HRASCONN hrasconn;
+	HRASCONN hrasconn = NULL;
 	get_hrasconn(&hrasconn);
 	RasHangUpA(hrasconn);
 	return true;
@@ -171,7 +171,7 @@ bool SDBackendRasapi::hangup()
 bool SDBackendRasapi::getstat()
 {
 #ifdef _WIN32
-	HRASCONN hrasconn;
+	HRASCONN hrasconn = NULL;
 	return get_hrasconn(&hrasconn);
 #else
 	return false;

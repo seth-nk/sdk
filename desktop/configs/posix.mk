@@ -5,6 +5,8 @@
 # This is free software with ABSOLUTELY NO WARRANTY.
 # 
 
+LIBSETHDKT := libsethdkt.so
+
 OSNAME := posix
 DEF_BACKEND := rp-pppoe
 
