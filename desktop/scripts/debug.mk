@@ -14,10 +14,10 @@ STRIP := true
 COMMENFLAGS += -g
 
 # disable opt
-FLAG_OPT := -O0
+#FLAG_OPT := -O0
 
 # disable lto
-FLAG_LTO :=
-FLAG_LD_LTO :=
+#FLAG_LTO :=
+#FLAG_LD_LTO :=
 
 endif

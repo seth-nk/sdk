@@ -12,6 +12,7 @@ openwrt/ipkg-common
 .*.swp
 *.so
 *.so.*
+*.glade~
 
 compile_commands.json
 
