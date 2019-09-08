@@ -25,7 +25,7 @@ else
 	ifeq ($(OS),Windows_NT)
 		ALL := libseth.dll
 		CFLAGS += -mconsole -D_WIN32
-		LDFLAGS += -lws2_32 -Wl,--export-all-symbols
+		LDFLAGS += -lws2_32 -Wl,--export-all-symbols -Wl,--stack,10000000
 		BINSUFFIX := .exe
 	else
 		LDFLAGS += -rdynamic
@@ -70,8 +70,8 @@ seth-dumpmeta : seth-dumpmeta.c
 seth-genhdr : seth-genhdr.c
 seth-split : seth-split.c
 seth-nkgetpin seth-dumpmeta seth-genhdr seth-split:
-	$(CC) $(CFLAGS) -no-pie -fno-pie -o $@$(BINSUFFIX) $< $(LDFLAGS) -lseth -L.
-	$(CC) $(CFLAGS) -no-pie -fno-pie -o $@-sls$(BINSUFFIX) $< $(LDFLAGS) libseth-static.a
+	$(CC) $(CFLAGS) -no-pie -fno-pie -o $@$(BINSUFFIX) $< -lseth -L. $(LDFLAGS)
+	$(CC) $(CFLAGS) -no-pie -fno-pie -o $@-sls$(BINSUFFIX) $< libseth-static.a $(LDFLAGS)
 	$(STRIP) -s $@$(BINSUFFIX)
 	$(STRIP) -s $@-sls$(BINSUFFIX)
 

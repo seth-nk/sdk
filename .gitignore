@@ -16,7 +16,7 @@ openwrt/ipkg-common
 
 compile_commands.json
 
-seth-sdk-windows/
+seth-dkt-and-sdk-windows/
 
 desktop/sethcli.conf
 desktop/sethcli_conf.c

@@ -9,13 +9,13 @@ BEGIN
     BLOCK "040904E4"
     BEGIN
       VALUE "CompanyName", "The-Seth-Project"
-      VALUE "FileDescription", "Seth Desktop-CLI demo for Windows"
-      VALUE "FileVersion", "nil"
-      VALUE "InternalName", "sethcli"
+      VALUE "FileDescription", "Seth Desktop frontends for Windows"
+      VALUE "FileVersion", "see internal"
+      VALUE "InternalName", "sethdkt"
       VALUE "LegalCopyright", "MIT"
-      VALUE "OriginalFilename", "sethcli4win.exe"
-      VALUE "ProductName", "sethcli4win"
-      VALUE "ProductVersion", "nil"
+      VALUE "OriginalFilename", "sethdkt"
+      VALUE "ProductName", "Seth-Desktop"
+      VALUE "ProductVersion", "see internal"
     END
   END
   BLOCK "VarFileInfo"

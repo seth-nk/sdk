@@ -1,9 +1,5 @@
 # The-Seth-Project 官方 SDK 仓库
 
-**此仓库未正式完成。SDK 的内容可能发生破坏性改变。**
-
-**此仓库正在过渡时期，软件将发生颠覆性不兼容改变，但仓库中存在新旧代码可能较为混乱。且在未来可能会发生破坏性改变。**
-
 ## 关于 Seth 服务
 
 见 [此处](https://tienetech.tk/seth/)
@@ -50,17 +46,13 @@ sudo make install
 
 ## 平台
 
-- `desktop` 在桌面平台（如 Unix、Linux 和 Windows）上使用 Seth 服务的工具 demo。见 desktop 目录下的 README 文件。
+- `desktop` 在桌面平台（如 Unix、Linux 和 Windows）上使用 Seth 数据文件并拨号的程序，他具有多种后端（RASAPI、RP-PPPoE、RP-PPPoE-Linux、nmcli）和多种前端（命令行、GTK+ 图形界面）。见 desktop 目录下的 README 文件。
 
-- `openwrt` 在 OpenWrt 上使用 Seth 服务的包。请参见 openwrt 目录下的 README 文件。
+- `openwrt` 在 OpenWrt 上使用 Seth 数据文件的包。请参见 openwrt 目录下的 README 文件。
 
 ## 我们与 NSWA Ranga 的关系
 
-NSWA Ranga 的开发者 NSWA Maintainers （或 NSWA Ranga Maintainers）是我们的合作伙伴。此仓库的部分代码使用了 NSWA Maintainers 贡献的代码。
-
-Seth 数据的计算这一难点的解决，部分来自 NSWA Maintainers 的努力。
-
-NSWA Ranga 产品内置了修改版本的 Seth 代码以使用 Seth 服务。
+NSWA Ranga 的开发者 NSWA Maintainers （或 NSWA Ranga Maintainers）是我们的合作伙伴。此仓库的部分代码使用了 NSWA Maintainers 贡献的代码。Seth 数据的计算这一难点的解决，NSWA Maintainers 也提供了很多帮助。NSWA Ranga 产品内置了基于 Seth 的功能。
 
 ## “Seth” 来源于什么
 
@@ -70,9 +62,9 @@ NSWA Ranga 产品内置了修改版本的 Seth 代码以使用 Seth 服务。
 
 ## 版权和免责声明
 
-Copyright (R) 2019 NSWA Maintainers
-
 Copyright (R) 2019 The-Seth-Project
+
+Copyright (R) 2019 NSWA Maintainers
 
 License: MIT, with additional license grant original maintainers unlimited rights for this code and the derived codes which are contributed to upstream.
 

@@ -4,6 +4,7 @@ all :
 clean :
 	$(MAKE) -C libseth clean
 	$(MAKE) -C desktop clean
+	$(MAKE) -C desktop OS=Windows_NT clean
 
 install : all
 	$(MAKE) -C libseth install

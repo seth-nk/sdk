@@ -37,6 +37,7 @@
 #include <fcntl.h>
 #include <inttypes.h>
 #include <libgen.h>
+#include <dirent.h>
 
 extern "C" {
 #include <gtk/gtk.h>
@@ -153,11 +154,11 @@ static gpointer dialup(gpointer user_data)
 #endif // _DEBUG
 
 	if (!sdbackend->dialup(auth->username.data(), auth->password.data())) {
-		g_idle_add(dialup_failed_callback, nullptr);
+		gdk_threads_add_idle(dialup_failed_callback, nullptr);
 	}
 
 	delete auth;
-	g_idle_add(reload_stat, nullptr);
+	gdk_threads_add_idle(reload_stat, nullptr);
 	return nullptr;
 }
 
@@ -180,7 +181,7 @@ void on_button_clicked(GtkButton *_button, gpointer user_data)
 
 	if (sdbackend->getstat()) {
 		sdbackend->hangup();
-		g_timeout_add(200, reload_stat, nullptr);
+		gdk_threads_add_timeout(200, reload_stat, nullptr);
 	} else {
 		char *papreal;
 		const char *password;
@@ -250,10 +251,8 @@ int seth_application_main(int argc, char *argv[])
 	Config::open_mem(default_sethcli_conf, default_sethcli_conf_size);
 
 #ifdef _WIN32
-	int pause = 0;
-
 	SetConsoleOutputCP(CP_UTF8);
-	HMODULE hModule = GetModuleHandleW(NULL);bj
+	HMODULE hModule = GetModuleHandleW(NULL);
 	WCHAR path[MAX_PATH];
 	GetModuleFileNameW(hModule, path, MAX_PATH);
 	PathRemoveFileSpecW(path);

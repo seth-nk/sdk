@@ -10,6 +10,9 @@ LIBSETHDKT := libsethdkt.so
 OSNAME := posix
 DEF_BACKEND := rp-pppoe
 
+FLAG_LTO := -flto
+FLAG_LD_LTO := --lto
+
 SETHDKT_CLI_EXTRA_FLAGS := -rdynamic
 SETHDKT_GTK_EXTRA_FLAGS := -rdynamic
 

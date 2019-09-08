@@ -7,15 +7,18 @@
 
 LIBSETHDKT := libsethdkt.dll
 
+ALL += sethdkt-gtkWL.exe
+
 BINSUFFIX := .exe
 COMMENFLAGS += -D_WIN32 -I../libseth
 LDFLAGS += -L../libseth -lws2_32 -lRasapi32 -lShlwapi -Wl,-Bstatic
-OBJS += seth4win.res
+
+FRONTENDS_OBJS += seth4win.res
 
 OSNAME := Windows
 DEF_BACKEND := rasapi
 PKG_STATIC := --static
-POST_LDFLAGS += -lpthread -liconv -Wl,--export-all-symbols -Wl,-Bdynamic
+POST_LDFLAGS += -lpthread -lintl -liconv -Wl,--export-all-symbols -Wl,-Bdynamic
 
 SETHDKT_GTK_EXTRA_FLAGS := -mwindows
 
