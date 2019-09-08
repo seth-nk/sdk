@@ -55,7 +55,7 @@ extern "C" {
 
 #include "frontend-gtk-glade.h"
 
-LIBSETH_APPLICATION("crop.seth.dkt.gtk")
+LIBSETH_APPLICATION("comp.seth.dkt.gtk")
 
 GtkWidget *window = NULL, *button, *label, *entry_password, *tv_adv;
 SDBackend *sdbackend;
@@ -85,6 +85,46 @@ static void errquit(const void *window, const char* fmt, ...)
 	g_free(msg);
 	va_end(args);
 	exit(1);
+}
+
+static void gtk_utils_tv_set_text(GtkTextView *widget, const gchar *text)
+{
+	GtkTextBuffer *buffer = gtk_text_view_get_buffer(widget);
+	gtk_text_buffer_set_text(buffer, text, -1);
+}
+
+static gchar *gtk_utils_tv_get_text(GtkTextView *widget)
+{
+	GtkTextIter start, end;
+	GtkTextBuffer *buffer = gtk_text_view_get_buffer(widget);
+	gtk_text_buffer_get_bounds(buffer, &start, &end);
+	return gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+}
+
+//====================================================================
+
+static void load_saved_config()
+{
+	gchar *data;
+	if (g_file_get_contents((std::string(".") + libseth_application_name + ".password").data(), &data, nullptr, nullptr)) {
+		gtk_entry_set_text(GTK_ENTRY(entry_password), data);
+		g_free(data);
+	}
+
+	if (g_file_get_contents((std::string(".") + libseth_application_name + ".configs").data(), &data, nullptr, nullptr)) {
+		gtk_utils_tv_set_text(GTK_TEXT_VIEW(tv_adv), data);
+		g_free(data);
+	}
+}
+
+static void save_config()
+{
+	const gchar *password = gtk_entry_get_text(GTK_ENTRY(entry_password));
+	g_file_set_contents((std::string(".") + libseth_application_name + ".password").data(), password, -1, nullptr);
+
+	gchar *data = gtk_utils_tv_get_text(GTK_TEXT_VIEW(tv_adv));
+	g_file_set_contents((std::string(".") + libseth_application_name + ".configs").data(), data, -1, nullptr);
+	g_free(data);
 }
 
 static gboolean reload_stat(gpointer user_data)
@@ -121,6 +161,7 @@ static gpointer dialup(gpointer user_data)
 	return nullptr;
 }
 
+//====================================================================
 
 extern "C"
 void on_button_clicked(GtkButton *_button, gpointer user_data)
@@ -128,23 +169,18 @@ void on_button_clicked(GtkButton *_button, gpointer user_data)
 	gtk_widget_set_sensitive(button, FALSE);
 	gtk_button_set_label(GTK_BUTTON(button), "请稍候");
 
-	GtkTextIter start, end;
-	GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tv_adv));
-	gtk_text_buffer_get_bounds(buffer, &start, &end);
-	gchar *text = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
-
+	gchar *text = gtk_utils_tv_get_text(GTK_TEXT_VIEW(tv_adv));
 	std::string _adv = std::string(text);
 	std::istringstream adv(_adv);
 	std::string line;
 	while (std::getline(adv, line)) {
 		Config::add_override(line);
 	}
-
 	g_free(text);
 
 	if (sdbackend->getstat()) {
 		sdbackend->hangup();
-		reload_stat(nullptr);
+		g_timeout_add(200, reload_stat, nullptr);
 	} else {
 		char *papreal;
 		const char *password;
@@ -169,6 +205,15 @@ void on_button_clicked(GtkButton *_button, gpointer user_data)
 	}
 }
 
+extern "C"
+void on_window_destroy(GtkWidget *object, gpointer user_data)
+{
+	save_config();
+	gtk_main_quit();
+}
+
+//====================================================================
+
 static void find_first_sth_file()
 {
 	DIR* dir;
@@ -191,7 +236,7 @@ static void find_first_sth_file()
 	closedir(dir);
 }
 
-void load_backend()
+static void load_backend()
 {
 	const char *backend; backend = Config::get("pppoe", "backend");
 
@@ -271,6 +316,7 @@ int seth_application_main(int argc, char *argv[])
 
 	reload_stat(nullptr);
 	find_first_sth_file();
+	load_saved_config();
 
 	if (filename.empty())
 		errquit(window, "未在目录 '%s' 中找到 Seth 数据文件", g_get_current_dir());

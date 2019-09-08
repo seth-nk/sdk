@@ -38,7 +38,8 @@ static std::map<std::string, std::string> override_map;
 
 void Config::add_override(const char *key, const char *value)
 {
-	override_map.insert({ key, value });
+//	override_map.insert({ key, value });
+	override_map[key] = value;
 }
 
 void Config::add_override(std::string &line)

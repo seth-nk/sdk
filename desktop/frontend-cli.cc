@@ -47,7 +47,7 @@ extern "C" {
 #include "backend.h"
 #include "version.h"
 
-LIBSETH_APPLICATION("crop.seth.dkt.cli")
+LIBSETH_APPLICATION("comp.seth.dkt.cli")
 
 static void check_null(const void *s, const char *name)
 {
