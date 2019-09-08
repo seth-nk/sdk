@@ -160,6 +160,7 @@ bool SDBackendNmcli::dialup(const char *usrnam, const char *passwd)
 			NM_SETTING_CONNECTION_INTERFACE_NAME, SETHD_PPPOE_IFNAME, //ifname,
 			NM_SETTING_CONNECTION_TYPE, "pppoe",
 			NM_SETTING_CONNECTION_AUTOCONNECT, FALSE,
+			NM_SETTING_CONNECTION_AUTOCONNECT_PRIORITY, 0,
 			nullptr);
 	nm_connection_add_setting(connection, NM_SETTING(s_con));
 
@@ -174,6 +175,7 @@ bool SDBackendNmcli::dialup(const char *usrnam, const char *passwd)
 	s_ip4 = (NMSettingIP4Config *)nm_setting_ip4_config_new();
 	g_object_set(G_OBJECT(s_ip4),
 			NM_SETTING_IP_CONFIG_METHOD, NM_SETTING_IP4_CONFIG_METHOD_AUTO,
+			NM_SETTING_IP_CONFIG_ROUTE_METRIC, 0,
 			nullptr);
 	nm_connection_add_setting(connection, NM_SETTING(s_ip4));
 
@@ -181,6 +183,7 @@ bool SDBackendNmcli::dialup(const char *usrnam, const char *passwd)
 	g_object_set(G_OBJECT(s_ip6),
 			NM_SETTING_IP_CONFIG_METHOD,
 			(ipv6enable ? NM_SETTING_IP6_CONFIG_METHOD_AUTO : NM_SETTING_IP6_CONFIG_METHOD_IGNORE),
+			NM_SETTING_IP_CONFIG_ROUTE_METRIC, 0,
 			nullptr);
 	nm_connection_add_setting(connection, NM_SETTING(s_ip6));
 
