@@ -41,6 +41,17 @@ void Config::add_override(const char *key, const char *value)
 	override_map.insert({ key, value });
 }
 
+void Config::add_override(std::string &line)
+{
+	size_t pos = line.find("=");
+	std::string key = line.substr(0, pos);
+	std::string value = line.substr(pos + 1);
+#ifdef _DEBUG
+	printf("== %s %s\n", key.data(), value.data());
+#endif // _DEBUG
+	add_override(key.data(), value.data());
+}
+
 bool Config::open(const char *file)
 {
 	if (!(kfile = g_key_file_new()))

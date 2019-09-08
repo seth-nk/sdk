@@ -2,6 +2,7 @@
 #define _CONFIG_H
 
 #include <stddef.h>
+#include <string>
 
 extern const char default_sethcli_conf[];
 extern size_t default_sethcli_conf_size;
@@ -10,6 +11,7 @@ namespace Config {
 	extern bool modified;
 
 	void add_override(const char *key, const char *value);
+	void add_override(std::string &line);
 	bool open(const char *file);
 	bool open_mem(const char *data, size_t length);
 	bool save(const char *file);

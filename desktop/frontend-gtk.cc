@@ -11,6 +11,8 @@
 #define _DEFAULT_SOURCE
 
 #include <string>
+#include <sstream>
+#include <iostream>
 
 #ifdef _WIN32
 #define WINVER 0x0601
@@ -55,17 +57,12 @@ extern "C" {
 
 LIBSETH_APPLICATION("crop.seth.dkt.gtk")
 
-GtkWidget *window = NULL, *button, *label, *entry_password;
+GtkWidget *window = NULL, *button, *label, *entry_password, *tv_adv;
 SDBackend *sdbackend;
 std::string filename("");
 
-static void errquit(const void *window, const char* fmt, ...)
+static void errbox(const void *window, const char* msg)
 {
-	va_list args;
-	va_start(args, fmt);
-	gchar *msg;
-	g_vasprintf(&msg, fmt, args);
-
 	GtkWidget *msgdialog = gtk_message_dialog_new(GTK_WINDOW(window),
 	                                   GTK_DIALOG_DESTROY_WITH_PARENT,
 	                                   GTK_MESSAGE_ERROR,
@@ -76,7 +73,15 @@ static void errquit(const void *window, const char* fmt, ...)
 
 	gtk_dialog_run(GTK_DIALOG(msgdialog));
 	gtk_widget_destroy(msgdialog);
+}
 
+static void errquit(const void *window, const char* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	gchar *msg;
+	g_vasprintf(&msg, fmt, args);
+	errbox(window, msg);
 	g_free(msg);
 	va_end(args);
 	exit(1);
@@ -86,6 +91,12 @@ static gboolean reload_stat(gpointer user_data)
 {
 	gtk_widget_set_sensitive(button, TRUE);
 	gtk_button_set_label(GTK_BUTTON(button), sdbackend->getstat() ? "断开" : "连接");
+	return G_SOURCE_REMOVE;
+}
+
+static gboolean dialup_failed_callback(gpointer user_data)
+{
+	errbox(window, ("后端返回如下错误：" + sdbackend->get_last_error()).data());
 	return G_SOURCE_REMOVE;
 }
 
@@ -101,9 +112,10 @@ static gpointer dialup(gpointer user_data)
 	printf("auth: %s %s\n", auth->username.data(), auth->password.data());
 #endif // _DEBUG
 
-	sdbackend->dialup(auth->username.data(), auth->password.data());
+	if (!sdbackend->dialup(auth->username.data(), auth->password.data())) {
+		g_idle_add(dialup_failed_callback, nullptr);
+	}
 
-	usleep(10);
 	delete auth;
 	g_idle_add(reload_stat, nullptr);
 	return nullptr;
@@ -116,6 +128,20 @@ void on_button_clicked(GtkButton *_button, gpointer user_data)
 	gtk_widget_set_sensitive(button, FALSE);
 	gtk_button_set_label(GTK_BUTTON(button), "请稍候");
 
+	GtkTextIter start, end;
+	GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tv_adv));
+	gtk_text_buffer_get_bounds(buffer, &start, &end);
+	gchar *text = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+
+	std::string _adv = std::string(text);
+	std::istringstream adv(_adv);
+	std::string line;
+	while (std::getline(adv, line)) {
+		Config::add_override(line);
+	}
+
+	g_free(text);
+
 	if (sdbackend->getstat()) {
 		sdbackend->hangup();
 		reload_stat(nullptr);
@@ -124,7 +150,7 @@ void on_button_clicked(GtkButton *_button, gpointer user_data)
 		const char *password;
 		int err;
 		if ((err = seth_nkpin_get_from_file(filename.data(), nullptr, time(NULL), &papreal)) < 0) {
-			errquit(window, "seth_nkpin_get_from_file() 错误, 错误代码: %d\n", err);
+			errquit(window, "seth_nkpin_get_from_file() 错误, 错误代码: %d", err);
 		}
 
 		password = gtk_entry_get_text(GTK_ENTRY(entry_password));
@@ -207,6 +233,7 @@ int seth_application_main(int argc, char *argv[])
 
 	gtk_init(&argc, &argv);
 
+/*
 	int shift = 0;
 	while (argc > shift + 1) {
 		shift++;
@@ -225,7 +252,7 @@ int seth_application_main(int argc, char *argv[])
 			break;
 		}
 	}
-
+*/
 	load_backend();
 
 	GtkBuilder *builder = gtk_builder_new();
@@ -236,6 +263,7 @@ int seth_application_main(int argc, char *argv[])
 	button = GTK_WIDGET(gtk_builder_get_object(builder, "button"));
 	label = GTK_WIDGET(gtk_builder_get_object(builder, "label"));
 	entry_password = GTK_WIDGET(gtk_builder_get_object(builder, "entry_password"));
+	tv_adv = GTK_WIDGET(gtk_builder_get_object(builder, "tv_adv"));
 
 	gtk_builder_connect_signals(builder, NULL);
 
