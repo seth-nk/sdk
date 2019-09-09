@@ -167,12 +167,15 @@ int seth_nkpin_get_from_file(const char *file, const char *username,
 		goto err_hdr_invalid;
 	}
 
-	if (username == NULL && hdr.flags & SETH_NK_FLAG_PrivacyExtensionEnabled) {
-		ret = NKCAT_ERROR_NOPAPNAME;
-		goto err_nopapname;
-	}
+	if (username == NULL) {
+		if (hdr.flags & SETH_NK_FLAG_PrivacyExtensionEnabled) {
+			ret = NKCAT_ERROR_NOPAPNAME;
+			goto err_nopapname;
+		}
 
-	username = hdr.papname;
+		hdr.papname[sizeof(hdr.papname) - 1] = 0;
+		username = hdr.papname;
+	}
 
 	offset = seth_nkpin_offset(&hdr, timestamp);
 	length = seth_hdr_get_length(&hdr);
