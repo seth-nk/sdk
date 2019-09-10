@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Seth Desktop (Gtk)
+Exec=sethdkt-gtk
+Icon=preferences-system-network
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Settings;Network;X-GNOME-NetworkSettings;X-GNOME-Utilities;
+StartupNotify=true
+X-KDE-StartupNotify=false

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+cd uxdist || exit 1
+
+find -type f | while read -r filename ; do
+	echo "removing '${1}/${filename}' ..."
+	rm -f "${1}/${filename}"
+done

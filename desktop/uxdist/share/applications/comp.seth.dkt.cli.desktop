@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=Seth Desktop (CLI)
+Exec=sh -c 'sethdkt-cli; echo; echo "press enter..."; read n'
+Icon=preferences-system-network
+Terminal=true
+Type=Application
+Categories=Settings;Network;
+StartupNotify=false

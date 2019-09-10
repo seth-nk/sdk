@@ -58,9 +58,9 @@ extern "C" {
 
 LIBSETH_APPLICATION("comp.seth.dkt.gtk")
 
-GtkWidget *window = NULL, *button, *label, *entry_password, *tv_adv;
-SDBackend *sdbackend;
-std::string filename("");
+static GtkWidget *window = NULL, *button, *label, *entry_password, *tv_adv;
+static SDBackend *sdbackend;
+static std::string filename("");
 
 static void errbox(const void *window, const char* msg)
 {
@@ -104,6 +104,16 @@ static gchar *gtk_utils_tv_get_text(GtkTextView *widget)
 
 //====================================================================
 
+static void addconfig(const char *text)
+{
+	std::string _adv = std::string(text);
+	std::istringstream adv(_adv);
+	std::string line;
+	while (std::getline(adv, line)) {
+		Config::add_override(line);
+	}
+}
+
 static void load_saved_config()
 {
 	gchar *data;
@@ -114,6 +124,7 @@ static void load_saved_config()
 
 	if (g_file_get_contents((std::string(".") + libseth_application_name + ".configs").data(), &data, nullptr, nullptr)) {
 		gtk_utils_tv_set_text(GTK_TEXT_VIEW(tv_adv), data);
+		addconfig(data);
 		g_free(data);
 	}
 }
@@ -171,12 +182,7 @@ void on_button_clicked(GtkButton *_button, gpointer user_data)
 	gtk_button_set_label(GTK_BUTTON(button), "请稍候");
 
 	gchar *text = gtk_utils_tv_get_text(GTK_TEXT_VIEW(tv_adv));
-	std::string _adv = std::string(text);
-	std::istringstream adv(_adv);
-	std::string line;
-	while (std::getline(adv, line)) {
-		Config::add_override(line);
-	}
+	addconfig(text);
 	g_free(text);
 
 	if (sdbackend->getstat()) {
@@ -297,8 +303,6 @@ int seth_application_main(int argc, char *argv[])
 		}
 	}
 */
-	load_backend();
-
 	GtkBuilder *builder = gtk_builder_new();
 	gtk_builder_add_from_string(builder, glade, sizeof(glade) - 1, NULL);
 
@@ -313,9 +317,10 @@ int seth_application_main(int argc, char *argv[])
 
 	g_object_unref(builder);
 
-	reload_stat(nullptr);
 	find_first_sth_file();
 	load_saved_config();
+	load_backend();
+	reload_stat(nullptr);
 
 	if (filename.empty())
 		errquit(window, "未在目录 '%s' 中找到 Seth 数据文件", g_get_current_dir());
@@ -335,6 +340,11 @@ int seth_application_main(int argc, char *argv[])
 	g_free(info);
 
 	gtk_widget_show(window);
+
+	if (Config::get_int("frontends.gtk", "auto.dialup") == 1) {
+		g_signal_emit_by_name(button, "clicked");
+	}
+
 	gtk_main();
 	exit(0);
 }

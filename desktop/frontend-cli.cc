@@ -155,7 +155,7 @@ int seth_application_main(int argc, char *argv[])
 	const char *filename; filename = Config::get("seth", "filename");
 	const char *backend; backend = Config::get("pppoe", "backend");
 #ifdef _WIN32
-	pause = Config::get_int("seth4win", "pause");
+	pause = Config::get_int("frontends.cli", "windows.pause");
 #endif // _WIN32
 	check_null(pappass, "pap password");
 	check_null(filename, "seth filename");

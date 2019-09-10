@@ -5,12 +5,12 @@
   <object class="GtkTextBuffer" id="textbuffer_adv">
     <property name="text" translatable="yes">pppoe.interface=eth0
 pppoe.enable_ipv6=1
-</property>
+frontends.gtk.auto.dialup=0</property>
   </object>
   <object class="GtkWindow" id="window">
     <property name="can_focus">False</property>
-    <property name="default_width">480</property>
-    <property name="default_height">360</property>
+    <property name="default_width">520</property>
+    <property name="default_height">400</property>
     <signal name="destroy" handler="on_window_destroy" swapped="no"/>
     <child type="titlebar">
       <object class="GtkHeaderBar">
@@ -67,7 +67,7 @@ pppoe.enable_ipv6=1
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">在这里编辑 seth-desktop 配置文件中的选项。例如 pppoe.interface=eth0 表示在 eth0 接口上建立 PPPoE 连接。请参考 sethcli.conf 文件，但 GTK+ 前端不支持全部的配置选项，如 pap.username 和 pap.password。GTK+ 前端独立存储密码，并且只使用非“隐私扩展启用”（这意味着数据文件中包含用户名）的数据文件。</property>
+                    <property name="label" translatable="yes">在这里编辑 seth-desktop 配置文件中的选项。例如 pppoe.interface=eth0 表示在 eth0 接口上建立 PPPoE 连接。但 GTK+ 前端不支持全部的配置选项，如 pap.username 和 pap.password。GTK+ 前端独立存储密码，并且只使用非“隐私扩展启用”（这意味着数据文件中包含用户名）的数据文件。如果希望在启动 GTK+ 前端时自动拨号，你可以将 frontends.gtk.auto.dialup 设置为 1。如果需要了解全部配置选项，请参考 CLI 前端生成的 sethcli.conf（或源码树中的 sethcli.conf.in） 文件。</property>
                     <property name="wrap">True</property>
                     <property name="wrap_mode">char</property>
                     <property name="xalign">0</property>

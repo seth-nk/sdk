@@ -19,7 +19,6 @@ password=123123
 #          rp-pppoe-linux: kernel mode rp-pppoe plugin for Linux. (Linux only)
 #          nmcli: use d-bus client to communicate with NetworkManager. It can make your
 #                 desktop-environment perceive connectivity and integration it. (Linux/Unix)
-#                 (Experimental quality)
 #          webhook: not impl yet.
 #          ranga: not impl yet.
 #          rasapi: win32 Ras API. (Windows only)
@@ -39,6 +38,19 @@ auto_def_route=1
 # not impl yet.
 enable_plugins=
 
-[seth4win]
-# pause: pause and wait for any key after dial-up on Windows to avoid console window close.
-pause=1
+[frontends.cli]
+# windows.pause and wait for any key after dial-up on Windows to avoid console window close.
+windows.pause=1
+
+# not impl yet.
+allow.hangup=0
+
+[frontends.gtk]
+# auto.dialup: auto dialup after starting gtk frontend.
+auto.dialup=0
+
+# not impl yet.
+auto.hangup=0
+
+# not impl yet.
+enable.multithreads.backend=0

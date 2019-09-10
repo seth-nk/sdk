@@ -87,14 +87,14 @@ install:
 	$(INSTALL) -m755 $(LIBSETHDKT) $(PREFIX)/lib/
 	$(INSTALL) -m755 sethdkt-cli $(PREFIX)/bin/
 	$(INSTALL) -m755 sethdkt-gtk $(PREFIX)/bin/
-	$(INSTALL) -m755 seth-pppoe $(PREFIX)/bin/
+	cp -r uxdist/. $(PREFIX)/
 	ldconfig
 
 uninstall:
 	rm -f $(PREFIX)/lib/$(LIBSETHDKT)
 	rm -f $(PREFIX)/bin/sethdkt-cli
 	rm -f $(PREFIX)/bin/sethdkt-gtk
-	rm -f $(PREFIX)/bin/seth-pppoe
+	./scripts/uxdist-uninstall $(PREFIX)
 	# old name
 	rm -f $(PREFIX)/bin/sethcli
 	ldconfig
