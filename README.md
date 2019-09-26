@@ -2,7 +2,7 @@
 
 ## 关于 Seth 服务
 
-见 [此处](https://tienetech.tk/seth/)
+请转到 [此处](https://seth-project.tk/)
 
 ## 构建并安装 libseth
 
@@ -54,11 +54,9 @@ sudo make install
 
 NSWA Ranga 的开发者 NSWA Maintainers （或 NSWA Ranga Maintainers）是我们的合作伙伴。此仓库的部分代码使用了 NSWA Maintainers 贡献的代码。Seth 数据的计算这一难点的解决，NSWA Maintainers 也提供了很多帮助。NSWA Ranga 产品内置了基于 Seth 的功能。
 
-## “Seth” 来源于什么
+## “Seth” 项目是谁在运作？
 
-在 The-Seth-Project 开发者的童年回忆 “Yu-Gi-Oh!” 系列动画片中，角色“海马濑人”的前世 “セト”（Seto Kaiba）的原型为古埃及神话的风暴之神“stẖ”，“stẖ”的一种英文翻译为“Seth”，再翻译成中文为“塞斯”。
-
-维基百科：https://en.wikipedia.org/wiki/List_of_Yu-Gi-Oh!_characters#Seto_Kaiba 和 https://en.wikipedia.org/wiki/Set_(deity)
+ The-Seth-Project 是由一群计算机技术爱好者组成的社区，其目的旨在帮助全部的校园宽带用户自由地接入他们的网络，特别是保障那些使用 GNU/Linux 和其他不被供应商支持的作业系统的用户的权益，但不论你使用什么作业系统，我们都仍然爱你。我们项目的名字 “Seth” 来自[古埃及神话中的风暴和沙漠之神 “stẖ”](https://en.wikipedia.org/wiki/Set_(deity))，“stẖ” 的一种英文翻译为“Seth”，再翻译成中文为“塞斯”。 
 
 ## 版权和免责声明
 
