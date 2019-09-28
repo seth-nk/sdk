@@ -115,12 +115,11 @@ int seth_application_main(int argc, char *argv[])
 
 	printf("%s\n", "Seth Desktop-CLI demo for " OSNAME "\n" \
 	               "Version: " SD_VERSION "\n" \
-	               "build with Seth SDK which licensed by MIT\n\n" \
-	               " * copyright 2019 NSWA Maintainers\n" \
-	               " * copyright 2019 The-Seth-Project\n" \
+	               "build with Seth SDK which licensed by MIT\n" \
+	               " * copyright 2019 The-Seth-Project and contributors\n" \
 		       "\n" \
 		       " SDK repo: https://github.com/seth-project/sdk\n" \
-		       " Website: https://tienetech.tk/seth/\n" \
+		       " Website: https://seth-project.tk\n" \
 	               "===============================================");
 
 	if (!cmd_nofilecreation && access("sethcli.conf", F_OK) == -1) {

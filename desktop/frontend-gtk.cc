@@ -329,12 +329,11 @@ int seth_application_main(int argc, char *argv[])
 
 	gchar *info = g_strconcat("GTK+ version seth-desktop frontend.\nVersion: ", SD_VERSION,
 		" (", OSNAME, ") Locale: 中文（简体）\n",
-		"build with Seth SDK which licensed by MIT\n\n" \
-		" * copyright 2019 The-Seth-Project\n" \
-		" * copyright 2019 NSWA Maintainers\n" \
+		"build with Seth SDK which licensed by MIT\n" \
+		"copyright 2019 <a href=\"https://github.com/seth-project/sdk/blob/master/CREDITS\">The-Seth-Project and contributors</a>\n" \
 		"\n" \
 		"SDK repo: <a href=\"https://github.com/seth-project/sdk\">https://github.com/seth-project/sdk</a>\n" \
-		"Website: <a href=\"https://tienetech.tk/seth/\">https://tienetech.tk/seth/</a>\n\n找到并使用数据文件：<b>",
+		"Website: <a href=\"https://seth-project.tk\">https://seth-project.tk</a>\n\n找到并使用数据文件：<b>",
 		filename.data(), "</b>", nullptr);
 	gtk_label_set_markup(GTK_LABEL(label), info);
 	g_free(info);
