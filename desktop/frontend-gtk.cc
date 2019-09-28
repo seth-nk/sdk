@@ -340,7 +340,7 @@ int seth_application_main(int argc, char *argv[])
 
 	gtk_widget_show(window);
 
-	if (Config::get_int("frontends.gtk", "auto.dialup") == 1) {
+	if (!sdbackend->getstat() && Config::get_int("frontends.gtk", "auto.dialup") == 1) {
 		g_signal_emit_by_name(button, "clicked");
 	}
 
