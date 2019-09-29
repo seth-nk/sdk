@@ -1,19 +1,21 @@
 # Seth pppd plugin for OpenWrt
 
+Seth 的 OpenWrt 移植由 [glider0](https://github.com/glider0) 贡献！
+
 ## 安装
 
 ### 预购建版本
 
-glider0 提供了预先构建的二进制版本，你只需要下载二进制文件并上传到 OpenWrt。
+我们提供了预先构建的二进制版本，你只需要下载二进制文件并上传到 OpenWrt。
 
 CPU|示例芯片组|下载
 ---|---------|----
-aarch64_cortex-a53|MediaTek Ralink ARM MT7622|[下载](https://raw.githubusercontent.com/seth-project/sdk/master/openwrt/build/aarch64_cortex-a53/seth-plugin.so)
-arm_cortex-a15+neon-vfpv4_eabi|Qualcomm Atheros IPQ806X|[下载](https://seth-project/openwrt-plugin/build/arm_cortex-a15+neon-vfpv4_eabi/seth-plugin.so)
-arm_cortex-a7+neon-vfpv4_eabi|Qualcomm Atheros IPQ40XX|[下载](https://seth-project/openwrt-plugin/build/arm_cortex-a7+neon-vfpv4_eabi/seth-plugin.so)
-arm_cortex-a9+vfpv3_eabi|Marvell Armada 37x/38x/XP|[下载](https://seth-project/openwrt-plugin/build/arm_cortex-a9+vfpv3_eabi/seth-plugin.so)
-mipsel_24kc|MediaTek Ralink MIPS MT7620A/N<br>MediaTek Ralink MIPS MT7621|[下载](https://seth-project/openwrt-plugin/build/mipsel_24kc/seth-plugin.so)
-mips_24kc|Atheros AR7xxx/AR9xxx<br>Qualcomm Atheros QCA95XX|[下载](https://seth-project/openwrt-plugin/build/mips_24kc/seth-plugin.so)
+aarch64_cortex-a53|MediaTek Ralink ARM MT7622|[下载](https://seth-project.tk/openwrt-plugin/build/aarch64_cortex-a53/seth-plugin.so)
+arm_cortex-a15+neon-vfpv4_eabi|Qualcomm Atheros IPQ806X|[下载](https://seth-project.tk/openwrt-plugin/build/arm_cortex-a15+neon-vfpv4_eabi/seth-plugin.so)
+arm_cortex-a7+neon-vfpv4_eabi|Qualcomm Atheros IPQ40XX|[下载](https://seth-project.tk/openwrt-plugin/build/arm_cortex-a7+neon-vfpv4_eabi/seth-plugin.so)
+arm_cortex-a9+vfpv3_eabi|Marvell Armada 37x/38x/XP|[下载](https://seth-project.tk/openwrt-plugin/build/arm_cortex-a9+vfpv3_eabi/seth-plugin.so)
+mipsel_24kc|MediaTek Ralink MIPS MT7620A/N<br>MediaTek Ralink MIPS MT7621|[下载](https://seth-project.tk/openwrt-plugin/build/mipsel_24kc/seth-plugin.so)
+mips_24kc|Atheros AR7xxx/AR9xxx<br>Qualcomm Atheros QCA95XX|[下载](https://seth-project.tk/openwrt-plugin/build/mips_24kc/seth-plugin.so)
 
 如果你的设备不受支持，欢迎打开 issue 来要求其他 CPU 支持。
 
