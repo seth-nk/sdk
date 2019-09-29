@@ -49,6 +49,8 @@ static int check()
 static int seth_override_by_sth_file(const char *fname)
 {
 	char *papreal;
+	int err;
+
 	if ((err = seth_nkpin_get_from_file(fname, NULL, time(NULL), &papreal)) < 0) {
 		info("seth_nkpin_get_from_file error, errcode: %d\n", err);
 		return -1;
