@@ -1,7 +1,3 @@
-openwrt/build.sh
-openwrt/ipkg-build
-openwrt/ipkg-common
-
 *.7z
 
 .windows-serial

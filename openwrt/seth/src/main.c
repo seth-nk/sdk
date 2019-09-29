@@ -32,19 +32,14 @@ LIBSETH_APPLICATION("seth.openwrt.pppdplugin")
 /* import pppd vars */
 #define MAXNAMELEN	256
 extern char user[MAXNAMELEN];
-typedef void (*notify_func) __P((void *, int));
-typedef void (*printer_func) __P((void *, char *, ...));
-extern int (*pap_check_hook) __P((void));
-extern int (*chap_check_hook) __P((void));
-extern void (*info) __P((char *, ...));
-extern void (*error) __P((char *, ...));
+void dbglog __P((char *, ...));	/* log a debug message */
+void info __P((char *, ...));	/* log an informational message */
+void notice __P((char *, ...));	/* log a notice-level message */
+void warn __P((char *, ...));	/* log a warning message */
+void error __P((char *, ...));	/* log an error message */
+void fatal __P((char *, ...));	/* log an error message and die(1) */
 
 char pppd_version[] = "2.4.7";
-
-static int check()
-{
-	return 1;
-}
 
 static int seth_override_by_sth_file(const char *fname)
 {
@@ -66,7 +61,7 @@ static int seth_try_sth_file(const char *format)
 {
 	char filename[PATH_MAX];
 	snprintf(filename, PATH_MAX, format, user);
-	info("seth: trying '%s'", filename);
+	info("seth: trying data file '%s'", filename);
 
 	if (access(filename, F_OK) == 0) {
 		return seth_override_by_sth_file(filename);
@@ -79,6 +74,8 @@ static int seth_try_override_file(const char *format)
 {
 	char filename[PATH_MAX];
 	snprintf(filename, PATH_MAX, format, user);
+	info("seth: trying override file '%s'", filename);
+
 	FILE *fp = fopen(filename, "r");
 	if (!fp)
 		return -1;
@@ -115,7 +112,4 @@ void plugin_init()
 	}
 
 	info("seth: overrided username: %s", user);
-
-	pap_check_hook = check;
-	chap_check_hook = check;
 }
