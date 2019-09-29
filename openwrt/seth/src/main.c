@@ -92,7 +92,7 @@ static int seth_override()
 {
 	if (seth_try_sth_file("/tmp/seth/%s.sth3") == 0)
 		return 0;
-	if (seth_try_sth_file("/var/seth/%s.sth3") == 0)
+	if (seth_try_sth_file("/etc/seth/%s.sth3") == 0)
 		return 0;
 	if (seth_try_override_file("/tmp/nk-override/%s") == 0)
 		return 0;
