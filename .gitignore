@@ -25,4 +25,5 @@ libseth/seth-nkgetpin
 libseth/seth-dumpmeta
 libseth/seth-genhdr
 libseth/seth-split
+libseth/seth-strip
 libseth/seth-*-sls
