@@ -57,6 +57,13 @@ $ sudo make install
 
 我们建议你使用[预先构建的 Windows 二进制版本](https://github.com/seth-project/sdk/releases/)，如果一定要自己编译，则 Windows 构建需要在类 UNIX 系统上运行 wine 进行，并在其中安装，MinGW 和 GTK+3 for Windows，请阅读 `wine_compile.sh` 获取更多信息。在纯 Windows 环境上构建应该是可行的，请自行研究。
 
+Windows 构建还需要依赖外部的代码，请使用以下命令完成同步或使用 `--recursive` 选项克隆存储库。（如果你不需要构建 Windows 版本，则不需要进行）
+
+```
+git submodule init
+git submodule update
+```
+
 ## 法律信息备注
 
 Seth Desktop 可以与某些 GPL 库进行连接，当你链接到这些 GPL 库时，你将受到 GPL 限制！

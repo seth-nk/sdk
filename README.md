@@ -44,6 +44,13 @@ sudo make install
 
 我们建议你使用[预先构建的 Windows 二进制版本](https://github.com/seth-project/sdk/releases/)，如果一定要自己编译，则 Windows 构建需要在类 UNIX 系统上运行 wine 进行，并在其中安装，MinGW 和 GTK+3 for Windows，请阅读 `wine_compile.sh` 获取更多信息。在纯 Windows 环境上构建应该是可行的，请自行研究。
 
+Windows 构建还需要依赖外部的代码，请使用以下命令完成同步或使用 `--recursive` 选项克隆存储库。（如果你不需要构建 Windows 版本，则不需要进行）
+
+```
+git submodule init
+git submodule update
+```
+
 ## 平台
 
 - `desktop` 在桌面平台（如 Unix、Linux 和 Windows）上使用 Seth 数据文件并拨号的程序，他具有多种后端（RASAPI、RP-PPPoE、RP-PPPoE-Linux、nmcli）和多种前端（命令行、GTK+ 图形界面）。见 desktop 目录下的 README 文件。

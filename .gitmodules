@@ -1,0 +1,3 @@
+[submodule "desktop/windist"]
+	path = desktop/windist
+	url = https://github.com/seth-project/seth-windows-distribute-rootfs.git
