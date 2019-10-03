@@ -25,7 +25,7 @@ else
 	ifeq ($(OS),Windows_NT)
 		ALL := libseth.dll
 		CFLAGS += -mconsole -D_WIN32
-		LDFLAGS += -lws2_32 -Wl,--export-all-symbols -Wl,--stack,10000000
+		LDFLAGS += -Wl,--export-all-symbols -Wl,--stack,10000000
 		BINSUFFIX := .exe
 	else
 		LDFLAGS += -rdynamic
