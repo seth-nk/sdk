@@ -34,7 +34,7 @@ else
 	ALL += libseth-static.a
 endif
 
-ALL_EXECUTABLE := seth-nkgetpin seth-dumpmeta seth-genhdr seth-split
+ALL_EXECUTABLE := seth-nkgetpin seth-dumpmeta seth-genhdr seth-split seth-strip
 
 SOMAJOR := 0
 SOMINOR := 1
@@ -69,7 +69,8 @@ seth-nkgetpin : seth-nkgetpin.c
 seth-dumpmeta : seth-dumpmeta.c
 seth-genhdr : seth-genhdr.c
 seth-split : seth-split.c
-seth-nkgetpin seth-dumpmeta seth-genhdr seth-split:
+seth-strip : seth-strip.c
+seth-nkgetpin seth-dumpmeta seth-genhdr seth-split seth-strip:
 	$(CC) $(CFLAGS) -no-pie -fno-pie -o $@$(BINSUFFIX) $< -lseth -L. $(LDFLAGS)
 	$(CC) $(CFLAGS) -no-pie -fno-pie -o $@-sls$(BINSUFFIX) $< libseth-static.a $(LDFLAGS)
 	$(STRIP) -s $@$(BINSUFFIX)
@@ -88,6 +89,7 @@ install : all
 	$(INSTALL) -m755 seth-dumpmeta $(PREFIX)/bin/
 	$(INSTALL) -m755 seth-genhdr $(PREFIX)/bin/
 	$(INSTALL) -m755 seth-split $(PREFIX)/bin/
+	$(INSTALL) -m755 seth-strip $(PREFIX)/bin/
 	ldconfig
 
 uninstall:
@@ -98,6 +100,7 @@ uninstall:
 	rm -f $(PREFIX)/bin/seth-dumpmeta
 	rm -f $(PREFIX)/bin/seth-genhdr
 	rm -f $(PREFIX)/bin/seth-split
+	rm -f $(PREFIX)/bin/seth-strip
 	ldconfig
 
 $(ALL_EXECUTABLE) : $(ALL)
