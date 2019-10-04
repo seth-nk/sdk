@@ -61,6 +61,7 @@ LIBSETH_APPLICATION("comp.seth.dkt.gtk")
 static GtkWidget *window = NULL, *button, *label, *entry_password, *tv_adv;
 static SDBackend *sdbackend;
 static std::string filename("");
+static bool textbuffer_adv_changed = false;
 
 static void errbox(const void *window, const char* msg)
 {
@@ -114,9 +115,17 @@ static void addconfig(const char *text)
 	}
 }
 
+extern "C" {
+static void tv_adv_text_changed(GtkTextBuffer *textbuffer, gpointer user_data)
+{
+	textbuffer_adv_changed = true;
+}
+}
+
 static void load_saved_config()
 {
 	gchar *data;
+
 	if (g_file_get_contents((std::string(".") + libseth_application_name + ".password").data(), &data, nullptr, nullptr)) {
 		gtk_entry_set_text(GTK_ENTRY(entry_password), data);
 		g_free(data);
@@ -127,6 +136,9 @@ static void load_saved_config()
 		addconfig(data);
 		g_free(data);
 	}
+
+	GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tv_adv));
+	g_signal_connect(buffer, "changed", G_CALLBACK(tv_adv_text_changed), nullptr);
 }
 
 static void save_config()
@@ -181,9 +193,15 @@ void on_button_clicked(GtkButton *_button, gpointer user_data)
 	gtk_widget_set_sensitive(button, FALSE);
 	gtk_button_set_label(GTK_BUTTON(button), "请稍候");
 
-	gchar *text = gtk_utils_tv_get_text(GTK_TEXT_VIEW(tv_adv));
-	addconfig(text);
-	g_free(text);
+	if (textbuffer_adv_changed) {
+#ifdef _DEBUG
+		printf("advconfig has been changed, re-overrided configs\n");
+#endif // _DEBUG
+		gchar *text = gtk_utils_tv_get_text(GTK_TEXT_VIEW(tv_adv));
+		addconfig(text);
+		g_free(text);
+		textbuffer_adv_changed = false;
+	}
 
 	if (sdbackend->getstat()) {
 		sdbackend->hangup();
@@ -192,7 +210,7 @@ void on_button_clicked(GtkButton *_button, gpointer user_data)
 		char *papreal;
 		const char *password;
 		int err;
-		if ((err = seth_nkpin_get_from_file(filename.data(), nullptr, time(NULL), &papreal)) < 0) {
+		if ((err = seth_nkpin_get_from_file(filename.data(), nullptr, 0, &papreal)) < 0) {
 			errquit(window, "seth_nkpin_get_from_file() 错误, 错误代码: %d", err);
 		}
 

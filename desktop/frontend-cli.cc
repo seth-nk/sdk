@@ -167,7 +167,7 @@ int seth_application_main(int argc, char *argv[])
 
 	char *papreal;
 	int err;
-	if ((err = seth_nkpin_get_from_file(filename, papuser, time(NULL), &papreal)) < 0) {
+	if ((err = seth_nkpin_get_from_file(filename, papuser, 0, &papreal)) < 0) {
 		fprintf(stderr, "seth_nkpin_get_from_file error, errcode: %d\n", err);
 		goto end;
 	}
