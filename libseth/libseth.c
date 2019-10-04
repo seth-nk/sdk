@@ -147,10 +147,6 @@ int seth_nkpin_get_from_file(const char *file, const char *username,
 	size_t length;
 	char *data;
 
-	if (timestamp == 0) {
-		timestamp = time(NULL);
-	}
-
 	if ((fd = open(file, O_RDONLY | O_NOATIME)) < 0) {;
 		ret = NKCAT_ERROR_OPEN_FAILD;
 		goto err_open;
@@ -177,13 +173,17 @@ int seth_nkpin_get_from_file(const char *file, const char *username,
 		username = hdr.papname;
 	}
 
-	offset = seth_nkpin_offset(&hdr, timestamp);
 	length = seth_hdr_get_length(&hdr);
 
 	if ((data = malloc(length + strlen(username) + 3)) == NULL) {
 		ret = NKCAT_ERROR_NOMEM;
 		goto err_malloc;
 	}
+
+	if (timestamp == 0) {
+		timestamp = time(NULL);
+	}
+	offset = seth_nkpin_offset(&hdr, timestamp);
 
 	if (lseek(fd, offset, SEEK_SET) < 0) {
 		ret = NKCAT_ERROR_FILE_SEEK;
