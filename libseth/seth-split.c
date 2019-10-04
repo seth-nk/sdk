@@ -78,7 +78,7 @@ static ssize_t writen(int fd, const void *ptr, size_t n)
 static void usage(const char *program)
 {
 	printf("usage: %s [options]\n\n"
-	       "    -i <input_file> (stdin while not specify)\n"
+	       "    -i <input_file>\n"
 	       "    -o <output_file> (stdout while not specify)\n\n"
 	       "  START (choose one and only one)\n"
 	       "    -s <start_time> (unix timestamp)\n"
@@ -129,8 +129,11 @@ int seth_application_main(int argc, char *argv[])
 	}
 
 	if (!ifile) {
-		ifd = STDIN_FILENO;
-	} else if ((ifd = open(ifile, O_RDONLY | O_NOATIME)) < 0) {
+		fprintf(stderr, "error: -i is needed, enter %s -h to get more infomation.\n", argv[0]);
+		exit(1);
+	}
+
+	if ((ifd = open(ifile, O_RDONLY | O_NOATIME)) < 0) {
 		exitval = 1;
 		perror("input file open error");
 		goto err_open_ifd;

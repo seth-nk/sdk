@@ -132,9 +132,16 @@ int seth_application_main(int argc, char *argv[])
 	}
 
 	if (!ifile) {
-		fprintf(stderr, "stdin is not allowed\n");
-		goto err_open_ifd;
-	} else if ((ifd = open(ifile, O_RDONLY | O_NOATIME)) < 0) {
+		fprintf(stderr, "error: -i is needed, enter %s -h to get more infomation.\n", argv[0]);
+		exit(1);
+	}
+
+	if (scale == 0) {
+		fprintf(stderr, "error: -s is needed, enter %s -h to get more infomation.\n", argv[0]);
+		exit(1);
+	}
+
+	if ((ifd = open(ifile, O_RDONLY | O_NOATIME)) < 0) {
 		exitval = 1;
 		perror("input file open error");
 		goto err_open_ifd;
