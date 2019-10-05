@@ -47,10 +47,10 @@ struct seth_v2_hdr *seth_hdr_new()
 }
 #endif // TARGET_WASM
 
-static void libseth_abi_check(int abi)
+static void libseth_ver_check(const char *version)
 {
-	if (abi != LIBSETH_ABI) {
-		fprintf(stderr, "libseth: application's ABI %d mismatches libseth's ABI %d, aborting.\n", abi, LIBSETH_ABI);
+	if (strcmp(version, LIBSETH_SDK_VERSION) != 0) {
+		fprintf(stderr, "libseth: application's sdk version '%s' mismatches libseth's '%s', aborting.\n", version, LIBSETH_SDK_VERSION);
 		abort();
 	}
 }
@@ -58,12 +58,12 @@ static void libseth_abi_check(int abi)
 #ifndef _WIN32
 void __attribute__((constructor)) libseth_auto_init()
 {
-	libseth_abi_check(libseth_application_abi);
+	libseth_ver_check(libseth_application_sdk_version);
 }
 #else
-void libseth_winnt_init(int abi)
+void libseth_winnt_startup(const char *version)
 {
-	libseth_abi_check(abi);
+	libseth_ver_check(version);
 }
 #endif // _WIN32
 

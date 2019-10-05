@@ -6,18 +6,19 @@
 
 #define __PACKSTRUCT __attribute__((packed))
 
-extern const int libseth_application_abi;
 
-#define LIBSETH_ABI	3
+extern const char *libseth_application_sdk_version;
+void libseth_winnt_startup(const char *version);
+int seth_application_main(int argc, char *argv[]);
+
+#define LIBSETH_SDK_VERSION	"0.4.1"
 #define LIBSETH_APPLICATION(name) \
-const int libseth_application_abi = LIBSETH_ABI; \
+const char *libseth_application_sdk_version = LIBSETH_SDK_VERSION; \
 const char *libseth_application_name = name;
 
 #if defined(LIBSETH_APPLICATION_PORTABLE_FOR_WINDOWS) && defined(_WIN32)
-void libseth_winnt_init(int abi);
-int seth_application_main(int argc, char *argv[]);
 int main(int argc, char *argv[]) {
-	libseth_winnt_init(libseth_application_abi);
+	libseth_winnt_startup(libseth_application_sdk_version);
 	return seth_application_main(argc, argv);
 }
 #endif
