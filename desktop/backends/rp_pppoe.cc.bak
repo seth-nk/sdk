@@ -23,11 +23,17 @@
 #include <fcntl.h>
 #include <inttypes.h>
 #include <libgen.h>
+#ifndef _WIN32
 #include <sys/socket.h>
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <sys/ioctl.h>
 #include <net/if.h>
+#endif // _WIN32
+
+extern "C" {
+#include <gio/gio.h>
+}
 
 #include "../backend.h"
 #include "../config.h"
@@ -37,6 +43,7 @@ class SDBackendRpPppoe : public SDBackend {
 private:
 	std::string lasterror;
 	bool kernel;
+	bool subprocess(const char **argv);
 public:
 	SDBackendRpPppoe(bool k) : kernel(k) {};
 	virtual std::string getid() { return (kernel ? "rp-pppoe-linux" : "rp-pppoe"); };
@@ -56,80 +63,73 @@ __attribute__((constructor)) static void backend_rp_pppoe_main(void)
 	SDBackendManager::register_backend(backend);
 }
 
-bool start_daemon(...)
-{
-	/* fixme: stub */
-	return true;
+extern "C" {
 }
 
-void load_os_ppp_driver(bool km)
+bool SDBackendRpPppoe::subprocess(const char **argv)
 {
-	/* fixme: stub */
-}
+	GSubprocess *subp;	
+	bool ret = false;
+	char *buf = nullptr;
 
-static const char *rp_pppoe_linux_km_plugins[] = {
-	"/etc/ppp/plugins/rp-pppoe.so",
-	"/usr/lib/pppd/2.4.7/rp-pppoe.so",
-	"/usr/lib/rp-pppoe/rp-pppoe.so",
-	"rp-pppoe.so",
-	nullptr
-};
+	if ((subp = g_subprocess_newv(argv, static_cast<GSubprocessFlags>(
+						G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+						G_SUBPROCESS_FLAGS_STDERR_MERGE),
+					nullptr)) == nullptr) {
+		lasterror = "start sub-process failed.";
+		goto err_subp_new;
+	}
+
+	g_subprocess_communicate_utf8(subp, nullptr, nullptr, &buf, nullptr, nullptr);
+
+	if (!g_subprocess_get_if_exited(subp)) {
+		lasterror = "sub-process exited abnormal. outputs: \n" + std::string(buf);
+		goto err_subp_fail;
+	}
+
+	if (g_subprocess_get_exit_status(subp)) {
+		lasterror = "sub-process exited failed. outputs: \n" + std::string(buf);
+		goto err_subp_fail;
+	}
+
+	lasterror = "success, outputs: \n" + std::string(buf);
+	ret = true;
+
+err_subp_fail:
+	g_object_unref(subp);
+err_subp_new:
+	return ret;
+}
 
 bool SDBackendRpPppoe::dialup(const char *usrnam, const char *passwd)
 {
+	const char *kernel = this->kernel ? "1" : "0";
 	const char *ifname = Config::get("pppoe", "interface", "eth0");
-	const char *plugin = "";
 
-	load_os_ppp_driver(this->kernel);
+	const char *argv[6];
+	argv[0] = "seth-pppoe";
+	argv[1] = ifname;
+	argv[2] = usrnam;
+	argv[3] = passwd;
+	argv[4] = kernel;
+	argv[5] = nullptr;
 
-	if (this->kernel) {
-		std::string nic = std::string("nic-") + ifname;
-
-		int tmp = 0;
-		while (rp_pppoe_linux_km_plugins[tmp] != nullptr) {
-			if (access(rp_pppoe_linux_km_plugins[tmp], F_OK) == 0) {
-				plugin = rp_pppoe_linux_km_plugins[tmp];
-				break;
-			}
-			tmp++;
-		}
-
-		if (strcmp(plugin, "") == 0) {
-			lasterror = "Kernel mode rp-pppoe not supported for your system. please try user mode\n";
-			return false;
-		}
-
-		return start_daemon("/usr/sbin/pppd", "plugin", plugin, \
-			nic.data(), "noipdefault", "noauth", \
-			"default-asyncmap", "defaultroute", \
-			"hide-password", "updetach", "usepeerdns"\
-			"mtu", "1492", "mru", "1492", "noaccomp", \
-			"nodeflate", "nopcomp", "novj", "novjccomp", \
-			"user", usrnam, "password", passwd, \
-			"lcp-echo-interval", "20", "lcp-echo-failure", "3", \
-			"ifname", SETHD_PPPOE_IFNAME, nullptr);
-	} else {
-		return start_daemon("/usr/sbin/pppd", "pty", "/usr/sbin/pppoe", \
-			"-I", "eth0", "-T", "80", "-U", "-m", "1412", \
-			"noipdefault", "noauth", \
-			"default-asyncmap", "defaultroute", \
-			"hide-password", "updetach", "usepeerdns"\
-			"mtu", "1492", "mru", "1492", "noaccomp", \
-			"nodeflate", "nopcomp", "novj", "novjccomp", \
-			"user", usrnam, "password", passwd, \
-			"lcp-echo-interval", "20", "lcp-echo-failure", "3", \
-			"ifname", SETHD_PPPOE_IFNAME, nullptr);
-	}
+	return subprocess(argv);
 }
 
 bool SDBackendRpPppoe::hangup()
 {
-	/* fixme: stub */
-	return true;
+	const char *argv[3];
+	argv[0] = "seth-pppoe";
+	argv[1] = "--hangup";
+	argv[2] = nullptr;
+
+	return subprocess(argv);
 }
 
 bool SDBackendRpPppoe::getstat()
 {
+#ifndef _WIN32
 	int fd;
 	struct ifreq ifr;
 	char iface[] = SETHD_PPPOE_IFNAME;
@@ -140,6 +140,9 @@ bool SDBackendRpPppoe::getstat()
 	strncpy(ifr.ifr_name , iface , IFNAMSIZ - 1);
 
 	return (ioctl(fd, SIOCGIFINDEX, &ifr) == 0);
+#else
+	return false;
+#endif // _WIN32
 }
 
 std::string SDBackendRpPppoe::get_last_error()
