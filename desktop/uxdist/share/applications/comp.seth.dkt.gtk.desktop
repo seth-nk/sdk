@@ -5,6 +5,6 @@ Exec=sethdkt-gtk
 Icon=preferences-system-network
 Terminal=false
 Type=Application
-Categories=GNOME;GTK;Settings;Network;X-GNOME-NetworkSettings;X-GNOME-Utilities;
+Categories=GNOME;GTK;Settings;Network;
 StartupNotify=true
 X-KDE-StartupNotify=false
