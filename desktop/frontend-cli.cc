@@ -116,7 +116,7 @@ int seth_application_main(int argc, char *argv[])
 
 	printf("%s\n", "Seth Desktop-CLI demo for " OSNAME "\n" \
 	               "Version: " SD_VERSION "\n" \
-	               "build with Seth SDK which licensed by MIT\n" \
+	               "build with Seth SDK (Version: " LIBSETH_SDK_VERSION ") which licensed by MIT\n" \
 	               " * copyright 2019 The-Seth-Project and contributors\n" \
 		       "\n" \
 		       " SDK repo: https://github.com/seth-project/sdk\n" \
