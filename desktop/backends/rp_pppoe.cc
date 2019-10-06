@@ -40,7 +40,7 @@ private:
 public:
 	SDBackendRpPppoe(bool k) : kernel(k) {};
 	virtual std::string getid() { return (kernel ? "rp-pppoe-linux" : "rp-pppoe"); };
-	virtual std::string getname() { return (kernel ? "RP-PPPoE kernel mode + kernel pppoe mod (Linux only)": "RP-PPPoE user mode (Unix/Linux)"); };
+	virtual std::string getname() { return (kernel ? "RP-PPPoE kernel mode (Linux only)": "RP-PPPoE user mode (Unix/Linux)"); };
 	virtual bool dialup(const char *usrnam, const char *passwd);
 	virtual bool hangup();
 	virtual bool getstat();
@@ -67,6 +67,12 @@ void load_os_ppp_driver(bool km)
 	/* fixme: stub */
 }
 
+int if_set_up(const char *ifname)
+{
+	/* fixme: stub */
+	return 0;
+}
+
 static const char *rp_pppoe_linux_km_plugins[] = {
 	"/etc/ppp/plugins/rp-pppoe.so",
 	"/usr/lib/pppd/2.4.7/rp-pppoe.so",
@@ -81,6 +87,7 @@ bool SDBackendRpPppoe::dialup(const char *usrnam, const char *passwd)
 	const char *plugin = "";
 
 	load_os_ppp_driver(this->kernel);
+	if_set_up(ifname);
 
 	if (this->kernel) {
 		std::string nic = std::string("nic-") + ifname;
@@ -109,8 +116,8 @@ bool SDBackendRpPppoe::dialup(const char *usrnam, const char *passwd)
 			"lcp-echo-interval", "20", "lcp-echo-failure", "3", \
 			"ifname", SETHD_PPPOE_IFNAME, nullptr);
 	} else {
-		return start_daemon("/usr/sbin/pppd", "pty", "/usr/sbin/pppoe", \
-			"-I", "eth0", "-T", "80", "-U", "-m", "1412", \
+		return start_daemon("/usr/sbin/pppd", "pty", \
+			"/usr/sbin/pppoe -I eth0 -T 80 -U -m 1412", \
 			"noipdefault", "noauth", \
 			"default-asyncmap", "defaultroute", \
 			"hide-password", "updetach", "usepeerdns"\
