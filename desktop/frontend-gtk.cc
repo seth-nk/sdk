@@ -28,6 +28,7 @@
 #include <time.h>
 #include <string.h>
 #include <stdarg.h>
+#include <wchar.h>
 
 #include <unistd.h>
 #include <signal.h>
@@ -278,8 +279,14 @@ static void load_backend()
 
 static void action_app_cb_open_dir(GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
+#ifndef _WIN32
 	std::string uri = std::string("file:///") + g_get_current_dir();
 	g_app_info_launch_default_for_uri(uri.data(), nullptr, nullptr);
+#else
+	wchar_t path[MAX_PATH + 1];
+	GetCurrentDirectoryW(MAX_PATH, path);
+	ShellExecuteW(NULL, L"open", path, NULL, NULL, SW_SHOWDEFAULT);
+#endif
 }
 
 static void action_app_cb_reset_config(GSimpleAction *action, GVariant *parameter, gpointer user_data)
@@ -299,7 +306,7 @@ static bool sethdkt_gtk_set_autostart()
 	std::string dest = std::string(g_get_user_config_dir()) + "/autostart/comp.seth.dkt.gtk.desktop";
 	if (g_file_get_contents(_PREFIX "/share/applications/comp.seth.dkt.gtk.desktop", &data, nullptr, nullptr)) {
 		if (!g_file_set_contents(dest.data(), data, -1, nullptr))
-			goto err_get_contens;
+			goto err_set_contens;
 	} else {
 		goto err_get_contens;
 	}
@@ -318,9 +325,12 @@ static bool sethdkt_gtk_set_autostart()
 	BOOL isWOW64;
 	REGSAM p = KEY_WRITE;
 
-	WCHAR path[MAX_PATH + 1];
+	WCHAR path[MAX_PATH + 1];//, wlpath[MAX_PATH + 1];
 	HMODULE hModule = GetModuleHandleW(NULL);
 	GetModuleFileNameW(hModule, path, MAX_PATH);
+	PathRemoveFileSpecW(path);
+
+	std::wstring wlpath = std::wstring(path) + L"\\sethdkt-gtkWL.exe";
 
 	IsWow64Process(GetCurrentProcess(), &isWOW64);
 	if (isWOW64)
@@ -329,7 +339,7 @@ static bool sethdkt_gtk_set_autostart()
 	if (RegCreateKeyExW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", 0, NULL, 0, p, NULL, &hKey, NULL) != ERROR_SUCCESS)
 		return false;
 
-	if (RegSetValueExW(hKey, L"seth4win", 0, REG_SZ, (BYTE*) path, sizeof(path) * sizeof(wchar_t))!= ERROR_SUCCESS){
+	if (RegSetValueExW(hKey, L"seth4win", 0, REG_SZ, (BYTE*) wlpath.data(), (wlpath.length() + 1) * sizeof(wchar_t)) != ERROR_SUCCESS) {
 		RegCloseKey(hKey);
 		return false;
 	}
