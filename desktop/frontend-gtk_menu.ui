@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="menu_main">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">打开数据文件存放目录</attribute>
+        <attribute name="action">app.open_dir</attribute>
+      </item>
+
+      <item>
+        <attribute name="label" translatable="yes">恢复全部高级选项为默认</attribute>
+        <attribute name="action">app.reset_config</attribute>
+      </item>
+    </section>
+
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">设定为自启动</attribute>
+        <attribute name="action">app.autostart_config</attribute>
+      </item>
+    </section>
+
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">检查更新</attribute>
+        <attribute name="action">app.check_updata</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

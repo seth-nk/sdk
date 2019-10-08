@@ -9,7 +9,7 @@ export PROJECT_WINECOMPILE=true
 export MAKE='mingw32-make'
 
 wine ${MAKE} -C libseth -j4 || exit 1
-(cd desktop; make OS=Windows_NT {sethcli_conf.c,frontend-gtk-glade.h})
+(cd desktop; make OS=Windows_NT {sethcli_conf.c,frontend-gtk-glade.h,frontend-gtk-menu.h})
 wine ${MAKE} -C desktop EXTRA_FLAGS=-I../libseth -j4 || exit 1
 
 unset MAKE

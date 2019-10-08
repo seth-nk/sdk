@@ -17,6 +17,7 @@ seth-dkt-and-sdk-windows/
 desktop/sethcli.conf
 desktop/sethcli_conf.c
 desktop/frontend-gtk-glade.h
+desktop/frontend-gtk-menu.h
 desktop/sethdkt-cli
 desktop/sethdkt-gtk
 desktop/seth4win.res

@@ -55,6 +55,7 @@ extern "C" {
 #include "version.h"
 
 #include "frontend-gtk-glade.h"
+#include "frontend-gtk-menu.h"
 
 LIBSETH_APPLICATION("comp.seth.dkt.gtk")
 
@@ -63,11 +64,11 @@ static SDBackend *sdbackend;
 static std::string filename("");
 static bool textbuffer_adv_changed = false;
 
-static void errbox(const void *window, const char* msg)
+static void msgbox(const void *window, GtkMessageType type, const char* msg)
 {
 	GtkWidget *msgdialog = gtk_message_dialog_new(GTK_WINDOW(window),
 	                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-	                                   GTK_MESSAGE_ERROR,
+	                                   type,
 	                                   GTK_BUTTONS_CLOSE,
 	                                   "%s", msg);
 
@@ -75,6 +76,11 @@ static void errbox(const void *window, const char* msg)
 
 	gtk_dialog_run(GTK_DIALOG(msgdialog));
 	gtk_widget_destroy(msgdialog);
+}
+
+static void errbox(const void *window, const char* msg)
+{
+	msgbox(window, GTK_MESSAGE_ERROR, msg);
 }
 
 static void errquit(const void *window, const char* fmt, ...)
@@ -270,6 +276,86 @@ static void load_backend()
 	}
 }
 
+static void action_app_cb_open_dir(GSimpleAction *action, GVariant *parameter, gpointer user_data)
+{
+	std::string uri = std::string("file:///") + g_get_current_dir();
+	g_app_info_launch_default_for_uri(uri.data(), nullptr, nullptr);
+}
+
+static void action_app_cb_reset_config(GSimpleAction *action, GVariant *parameter, gpointer user_data)
+{
+	GtkBuilder *builder = gtk_builder_new();
+	gtk_builder_add_from_string(builder, glade, sizeof(glade) - 1, NULL);
+	GtkWidget *adv = GTK_WIDGET(gtk_builder_get_object(builder, "tv_adv"));
+	errquit(window, "%s\n%s", g_file_set_contents((std::string(".") + libseth_application_name + ".configs").data(),
+		gtk_utils_tv_get_text(GTK_TEXT_VIEW(adv)), -1, nullptr) ? "恢复高级设置为默认成功" : "恢复高级设置为默认失败",
+		"修改将在重新启动 Seth Desktop GTK 后生效");
+}
+
+#ifndef _WIN32
+static bool sethdkt_gtk_set_autostart()
+{
+	gchar *data;
+	std::string dest = std::string(g_get_user_config_dir()) + "/autostart/comp.seth.dkt.gtk.desktop";
+	if (g_file_get_contents(_PREFIX "/share/applications/comp.seth.dkt.gtk.desktop", &data, nullptr, nullptr)) {
+		if (!g_file_set_contents(dest.data(), data, -1, nullptr))
+			goto err_get_contens;
+	} else {
+		goto err_get_contens;
+	}
+
+	return true;
+
+err_set_contens:
+	g_free(data);
+err_get_contens:
+	return false;
+}
+#else
+static bool sethdkt_gtk_set_autostart()
+{
+	HKEY hKey;
+	BOOL isWOW64;
+	REGSAM p = KEY_WRITE;
+
+	WCHAR path[MAX_PATH + 1];
+	HMODULE hModule = GetModuleHandleW(NULL);
+	GetModuleFileNameW(hModule, path, MAX_PATH);
+
+	IsWow64Process(GetCurrentProcess(), &isWOW64);
+	if (isWOW64)
+		p |= KEY_WOW64_64KEY;
+
+	if (RegCreateKeyExW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", 0, NULL, 0, p, NULL, &hKey, NULL) != ERROR_SUCCESS)
+		return false;
+
+	if (RegSetValueExW(hKey, L"seth4win", 0, REG_SZ, (BYTE*) path, sizeof(path) * sizeof(wchar_t))!= ERROR_SUCCESS){
+		RegCloseKey(hKey);
+		return false;
+	}
+	RegCloseKey(hKey);
+	return true;
+}
+#endif // _WIN32
+
+static void action_app_cb_autostart_config(GSimpleAction *action, GVariant *parameter, gpointer user_data)
+{
+	msgbox(window, GTK_MESSAGE_INFO, sethdkt_gtk_set_autostart() ? "设置为自动启动成功。\n\n若你使用第三方工具禁用 Seth Desktop 的自启动后想要恢复。重复运行本工具可能无法恢复，请在第三方工具中解除禁用。" : "设置为自动启动失败。");
+}
+
+static void action_app_cb_check_updata(GSimpleAction *action, GVariant *parameter, gpointer user_data)
+{
+	g_app_info_launch_default_for_uri("https://github.com/seth-project/sdk/releases", nullptr, nullptr);
+}
+
+static const GActionEntry app_actions[] = {
+	{ "open_dir", action_app_cb_open_dir },
+	{ "reset_config", action_app_cb_reset_config },
+	{ "autostart_config", action_app_cb_autostart_config },
+	{ "check_updata", action_app_cb_check_updata }
+};
+
+
 int seth_application_main(int argc, char *argv[])
 {
 	Config::open_mem(default_sethcli_conf, default_sethcli_conf_size);
@@ -323,8 +409,18 @@ int seth_application_main(int argc, char *argv[])
 */
 	GtkBuilder *builder = gtk_builder_new();
 	gtk_builder_add_from_string(builder, glade, sizeof(glade) - 1, NULL);
+	gtk_builder_add_from_string(builder, menu, sizeof(menu) - 1, NULL);
 
 	window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
+	GMenuModel *menu = G_MENU_MODEL(gtk_builder_get_object(builder, "menu_main"));
+
+	GActionGroup *action_group = (GActionGroup *) g_simple_action_group_new();
+	g_action_map_add_action_entries(G_ACTION_MAP(action_group), app_actions, G_N_ELEMENTS(app_actions), window);
+	gtk_widget_insert_action_group(window, "app", action_group);
+	g_object_unref(action_group);
+
+	GtkWidget *menu_button = GTK_WIDGET(gtk_builder_get_object(builder, "menu_button_main"));
+	gtk_menu_button_set_menu_model(GTK_MENU_BUTTON(menu_button), menu);
 
 	button = GTK_WIDGET(gtk_builder_get_object(builder, "button"));
 	label = GTK_WIDGET(gtk_builder_get_object(builder, "label"));

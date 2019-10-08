@@ -23,7 +23,7 @@ FLAG_OPT := -O3
 
 include scripts/debug.mk
 
-COMMENFLAGS += -Wall $(FLAG_OPT) $(FLAG_LTO) $(EXTRA_FLAGS)
+COMMENFLAGS += -Wall $(FLAG_OPT) $(FLAG_LTO) $(EXTRA_FLAGS) -D_PREFIX='"$(PREFIX)"'
 LDFLAGS := $(FLAG_LD_LTO) -static-libgcc -static-libstdc++ -lseth
 
 BINSUFFIX :=
@@ -62,8 +62,10 @@ sethdkt-cli : frontend-cli.cc $(LIBSETHDKT) $(FRONTENDS_OBJS)
 
 frontend-gtk-glade.h :  frontend-gtk.glade
 	./scripts/bin2h frontend-gtk.glade glade > frontend-gtk-glade.h
+frontend-gtk-menu.h :  frontend-gtk_menu.ui
+	./scripts/bin2h frontend-gtk_menu.ui menu > frontend-gtk-menu.h
 
-sethdkt-gtk : frontend-gtk.cc $(LIBSETHDKT) frontend-gtk-glade.h $(FRONTENDS_OBJS)
+sethdkt-gtk : frontend-gtk.cc $(LIBSETHDKT) frontend-gtk-glade.h frontend-gtk-menu.h $(FRONTENDS_OBJS)
 	$(CXX) $(SETHDKT_GTK_EXTRA_FLAGS) $(CXXFLAGS) -o $@.o $(shell $(PKGCONFIG) --cflags gtk+-3.0) -c $<
 	$(CXX) -no-pie $(SETHDKT_GTK_EXTRA_FLAGS) $(CXXFLAGS) -o $@$(BINSUFFIX) $@.o $(FRONTENDS_OBJS) $(LDFLAGS) -lsethdkt -L. $(shell $(PKGCONFIG) --libs gtk+-3.0)
 	$(STRIP) -s $@$(BINSUFFIX)
@@ -81,7 +83,7 @@ sethcli_conf.c : sethcli.conf.in
 	$(CXX) -fPIC $(CXXFLAGS) -o $@ -c $<
 
 clean:
-	rm -f $(ALL) $(OBJS) *.o *.res *.exe *.so *.dll sethcli_conf.c frontend-gtk-glade.h
+	rm -f $(ALL) $(OBJS) *.o *.res *.exe *.so *.dll sethcli_conf.c frontend-gtk-glade.h frontend-gtk-menu.h
 
 install:
 	$(INSTALL) -m755 $(LIBSETHDKT) $(PREFIX)/lib/
