@@ -8,8 +8,10 @@ Seth 的 OpenWrt 移植由 [glider0](https://github.com/glider0) 贡献！
 
 我们提供了预先构建的二进制版本，你只需要下载二进制文件并上传到 OpenWrt。
 
-CPU|下载（与 musl libc 链接）
--|-
+请注意，预构建版本与 musl libc 链接，不适用于其他 libc（如 glibc, uClibc），OpenWrt 默认使用 musl libc。
+
+CPU|pppd 版本 2.4.7|pppd 版本 2.4.8
+-|-|-
 arm|[下载](https://seth-nk.github.io/openwrt-plugin-builds/arm/seth-plugin.so)
 arm_cortex-a5|[下载](https://seth-nk.github.io/openwrt-plugin-builds/arm_cortex-a5/seth-plugin.so)
 arm_cortex-a5_neon-vfpv4|[下载](https://seth-nk.github.io/openwrt-plugin-builds/arm_cortex-a5_neon-vfpv4/seth-plugin.so)
@@ -27,6 +29,7 @@ mips_mips32|[下载](https://seth-nk.github.io/openwrt-plugin-builds/mips_mips32
 mipsel_24kc|[下载](https://seth-nk.github.io/openwrt-plugin-builds/mipsel_24kc/seth-plugin.so)
 mipsel_4kec|[下载](https://seth-nk.github.io/openwrt-plugin-builds/mipsel_4kec/seth-plugin.so)
 mipsel_74kc|[下载](https://seth-nk.github.io/openwrt-plugin-builds/mipsel_74kc/seth-plugin.so)
+mipsel_mips32|[下载](https://seth-nk.github.io/openwrt-plugin-builds/mipsel_mips32/seth-plugin.so)
 
 
 请选择你的设备对应的 CPU，否则可能无法正常执行、导致崩溃或损失性能。
