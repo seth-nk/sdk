@@ -9,6 +9,7 @@ Seth 的 OpenWrt 移植由 [glider0](https://github.com/glider0) 贡献！
 我们提供了预先构建的二进制版本，你只需要下载二进制文件并上传到 OpenWrt。
 
 CPU|下载（与 musl libc 链接）
+-|-
 arm|[下载](https://seth-nk.github.io/openwrt-plugin-builds/arm/seth-plugin.so)
 arm_cortex-a5|[下载](https://seth-nk.github.io/openwrt-plugin-builds/arm_cortex-a5/seth-plugin.so)
 arm_cortex-a5_neon-vfpv4|[下载](https://seth-nk.github.io/openwrt-plugin-builds/arm_cortex-a5_neon-vfpv4/seth-plugin.so)
