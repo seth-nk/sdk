@@ -8,14 +8,27 @@ Seth 的 OpenWrt 移植由 [glider0](https://github.com/glider0) 贡献！
 
 我们提供了预先构建的二进制版本，你只需要下载二进制文件并上传到 OpenWrt。
 
-CPU|示例芯片组|下载
----|---------|----
-aarch64_cortex-a53|MediaTek Ralink ARM MT7622|[下载](https://seth-project.tk/openwrt-plugin/build/aarch64_cortex-a53/seth-plugin.so)
-arm_cortex-a15+neon-vfpv4_eabi|Qualcomm Atheros IPQ806X|[下载](https://seth-project.tk/openwrt-plugin/build/arm_cortex-a15+neon-vfpv4_eabi/seth-plugin.so)
-arm_cortex-a7+neon-vfpv4_eabi|Qualcomm Atheros IPQ40XX|[下载](https://seth-project.tk/openwrt-plugin/build/arm_cortex-a7+neon-vfpv4_eabi/seth-plugin.so)
-arm_cortex-a9+vfpv3_eabi|Marvell Armada 37x/38x/XP|[下载](https://seth-project.tk/openwrt-plugin/build/arm_cortex-a9+vfpv3_eabi/seth-plugin.so)
-mipsel_24kc|MediaTek Ralink MIPS MT7620A/N<br>MediaTek Ralink MIPS MT7621|[下载](https://seth-project.tk/openwrt-plugin/build/mipsel_24kc/seth-plugin.so)
-mips_24kc|Atheros AR7xxx/AR9xxx<br>Qualcomm Atheros QCA95XX|[下载](https://seth-project.tk/openwrt-plugin/build/mips_24kc/seth-plugin.so)
+CPU|下载（与 musl libc 链接）
+arm|[下载](https://seth-nk.github.io/openwrt-plugin-builds/arm/seth-plugin.so)
+arm_cortex-a5|[下载](https://seth-nk.github.io/openwrt-plugin-builds/arm_cortex-a5/seth-plugin.so)
+arm_cortex-a5_neon-vfpv4|[下载](https://seth-nk.github.io/openwrt-plugin-builds/arm_cortex-a5_neon-vfpv4/seth-plugin.so)
+arm_cortex-a7|[下载](https://seth-nk.github.io/openwrt-plugin-builds/arm_cortex-a7/seth-plugin.so)
+arm_cortex-a7_neon-vfpv4|[下载](https://seth-nk.github.io/openwrt-plugin-builds/arm_cortex-a7_neon-vfpv4/seth-plugin.so)
+arm_cortex-a9|[下载](https://seth-nk.github.io/openwrt-plugin-builds/arm_cortex-a9/seth-plugin.so)
+arm_cortex-a9_neon-vfpv4|[下载](https://seth-nk.github.io/openwrt-plugin-builds/arm_cortex-a9_neon-vfpv4/seth-plugin.so)
+arm_cortex-a15_neon-vfpv4|[下载](https://seth-nk.github.io/openwrt-plugin-builds/arm_cortex-a15_neon-vfpv4/seth-plugin.so)
+arm_cortex-a53_neon-vfpv4|[下载](https://seth-nk.github.io/openwrt-plugin-builds/arm_cortex-a53_neon-vfpv4/seth-plugin.so)
+aarch64_cortex-a53|[下载](https://seth-nk.github.io/openwrt-plugin-builds/aarch64_cortex-a53/seth-plugin.so)
+aarch64_cortex-a72|[下载](https://seth-nk.github.io/openwrt-plugin-builds/aarch64_cortex-a72/seth-plugin.so)
+aarch64_generic|[下载](https://seth-nk.github.io/openwrt-plugin-builds/aarch64_generic/seth-plugin.so)
+mips_24kc|[下载](https://seth-nk.github.io/openwrt-plugin-builds/mips_24kc/seth-plugin.so)
+mips_mips32|[下载](https://seth-nk.github.io/openwrt-plugin-builds/mips_mips32/seth-plugin.so)
+mipsel_24kc|[下载](https://seth-nk.github.io/openwrt-plugin-builds/mipsel_24kc/seth-plugin.so)
+mipsel_4kec|[下载](https://seth-nk.github.io/openwrt-plugin-builds/mipsel_4kec/seth-plugin.so)
+mipsel_74kc|[下载](https://seth-nk.github.io/openwrt-plugin-builds/mipsel_74kc/seth-plugin.so)
+
+
+请选择你的设备对应的 CPU，否则可能无法正常执行、导致崩溃或损失性能。
 
 如果你的设备不受支持，欢迎打开 issue 来要求其他 CPU 支持。
 
