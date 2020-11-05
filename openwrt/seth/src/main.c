@@ -39,7 +39,7 @@ void warn __P((char *, ...));	/* log a warning message */
 void error __P((char *, ...));	/* log an error message */
 void fatal __P((char *, ...));	/* log an error message and die(1) */
 
-char pppd_version[] = "2.4.7";
+char pppd_version[] = _PPPD_VERSION;
 
 static int seth_override_by_sth_file(const char *fname)
 {

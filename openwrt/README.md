@@ -36,13 +36,23 @@ mipsel_mips32|[下载](https://seth-nk.github.io/openwrt-plugin-builds/pppd2.4.7
 
 如果你的设备不受支持，欢迎打开 issue 来要求其他 CPU 支持。
 
+OpenWrt 19.07 及更低版本，请使用 pppd 2.4.7 版本
+
 ```
 scp seth-plugin.so root@192.168.1.1:/usr/lib/pppd/2.4.7/
+```
+
+OpenWrt 当前 snapshot 及 19.07 的下一个版本（未发布），请使用 pppd 2.4.8 版本
+
+```
+scp seth-plugin.so root@192.168.1.1:/usr/lib/pppd/2.4.8/
 ```
 
 ### 通过源代码构建
 
 将 openwrt/seth 放入 OpenWrt 源码树 `package` 目录下
+
+如果源码树是 OpenWrt 当前 snapshot 及 19.07 的下一个版本（未发布），编辑 `package/seth/Makefile` 文件，将 `_PPPD_VERSION` 改为 2.4.8。如果是 19.07 及以下版本则无需修改。
 
 ```
 make package/seth/download V=s

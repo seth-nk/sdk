@@ -33,7 +33,7 @@ endef
 
 define Build/Compile
 	$(MAKE) -C "$(PKG_BUILD_DIR)/libseth" CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" libseth-static.a
-	$(TARGET_CC) $(TARGET_CFLAGS) -o "$(PKG_BUILD_DIR)/seth-plugin.so" $(TARGET_LDFLAGS) -I"$(PKG_BUILD_DIR)/libseth/" "$(PKG_BUILD_DIR)/main.c" "$(PKG_BUILD_DIR)/libseth/libseth-static.a"
+	$(TARGET_CC) $(TARGET_CFLAGS) -o "$(PKG_BUILD_DIR)/seth-plugin.so" $(TARGET_LDFLAGS) -I"$(PKG_BUILD_DIR)/libseth/" '-D_PPPD_VERSION="2.4.7"' "$(PKG_BUILD_DIR)/main.c" "$(PKG_BUILD_DIR)/libseth/libseth-static.a"
 endef
 
 define Package/seth/install
