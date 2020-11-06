@@ -1,9 +1,5 @@
 # The-Seth-Project 官方 SDK 仓库
 
-## 关于 Seth 服务
-
-请转到 [此处](https://seth-project.tk/)
-
 ## 构建并安装 libseth
 
 ```
@@ -58,6 +54,10 @@ git submodule update
 - `desktop` 在桌面平台（如 Unix、Linux 和 Windows）上使用 Seth 数据文件并拨号的程序，他具有多种后端（RASAPI、RP-PPPoE、RP-PPPoE-Linux、nmcli）和多种前端（命令行、GTK+ 图形界面）。见 desktop 目录下的 README 文件。
 
 - `openwrt` 在 OpenWrt 上使用 Seth 数据文件的包。请参见 openwrt 目录下的 README 文件。
+
+## 获取 Seth 数据文件
+
+请转到 [此处](https://seth-nk.github.io/)
 
 ## “Seth” 项目是谁在运作？
 
