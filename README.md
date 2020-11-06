@@ -61,11 +61,11 @@ git submodule update
 
 ## “Seth” 项目是谁在运作？
 
- The-Seth-Project 是由一群计算机技术爱好者组成的社区，其目的旨在帮助全部的校园宽带用户自由地接入他们的网络，特别是保障那些使用 GNU/Linux 和其他不被供应商支持的作业系统的用户的权益，但不论你使用什么作业系统，我们都仍然爱你。我们项目的名字 “Seth” 来自[古埃及神话中的风暴和沙漠之神 “stẖ”](https://en.wikipedia.org/wiki/Set_(deity))，“stẖ” 的一种英文翻译为“Seth”，再翻译成中文为“塞斯”。 
+Seth Project 是由计算机技术爱好者组成的社群，其目的最初只是为帮助自己自由地接入网络。但我们乐意将我们利用反向工程取得的成果分享，从而保障那些使用 GNU/Linux 和其他不被供应商支持的作业系统的用户的权益，但不论你使用什么作业系统，我们都仍然爱你。我们项目的名字 “Seth” 来自[古埃及神话中的风暴和沙漠之神 “stẖ”](https://en.wikipedia.org/wiki/Set_(deity))，“stẖ” 的一种英文翻译为“Seth”，再翻译成中文为“塞斯”。
 
 ## 版权和免责声明
 
-Copyright (R) 2019 [The-Seth-Project and contributors](CREDITS))
+Copyright (R) 2019-2020 [The-Seth-Project and contributors](CREDITS))
 
 License: MIT, with additional license grant original maintainers unlimited rights for this code and the derived codes which are contributed to upstream.
 

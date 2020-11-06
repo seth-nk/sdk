@@ -39,6 +39,10 @@ void warn __P((char *, ...));	/* log a warning message */
 void error __P((char *, ...));	/* log an error message */
 void fatal __P((char *, ...));	/* log an error message and die(1) */
 
+typedef void (*notify_func) __P((void *, int));
+extern struct notifier *exitnotify;
+void add_notifier __P((struct notifier **, notify_func, void *));
+
 char pppd_version[] = _PPPD_VERSION;
 
 static int seth_override_by_sth_file(const char *fname)
@@ -100,16 +104,26 @@ static int seth_override()
 	return -1;
 }
 
+void on_exitnotify(void *opaque, int arg)
+{
+	info("seth: pppd exiting: %d", arg);
+	if (arg != 5) {
+		info("seth: prevent openwrt restarting pppd to protect your account");
+		_exit(2);
+	}
+}
+
 void plugin_init()
 {
-
-	info("seth: Seth pppd plugin 0.1 loaded");
-	info("seth: copyright 2019 glider0, The-Seth-Project");
+	info("seth: Seth pppd plugin 0.2.1 loaded");
+	info("seth: copyright 2019-2020 glider0, The-Seth-Project");
 
 	if (seth_override() < 0) {
 		error("seth: failed: no data file or override file");
 		exit(1);
 	}
+
+	add_notifier(&exitnotify, on_exitnotify, NULL);
 
 	info("seth: overrided username: %s", user);
 }
